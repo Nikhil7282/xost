@@ -1,22 +1,69 @@
+import axios from "axios";
 import { useState } from "react";
+import axiosClient from "../axios/axiosClient";
+
+type UserDetails = {
+  name: string;
+  email: string;
+  password: string;
+  pic: File | null;
+};
 
 export default function SignUpPage() {
-  const [userDetails, setUserDetails] = useState({
+  const [userDetails, setUserDetails] = useState<UserDetails>({
     name: "",
     email: "",
     password: "",
     pic: null,
   });
+  const [loading, setLoading] = useState<true | false>(false);
 
-  const handleChange = (e: any): void => {
+  const imageUpload = async (image: any) => {
+    setLoading(true);
+    if (image === undefined) {
+      setLoading(false);
+      console.log("loading...");
+      return;
+    }
+    if (image.type === "image/jpeg" || image.type === "image/png") {
+      const uploadInstance = axios.create();
+
+      const formData = new FormData();
+      formData.append("file", image);
+      formData.append("upload_preset", "xost-chat-app");
+      formData.append("cloud_name", "dhpnudwl9");
+      const res = await uploadInstance.post(
+        `https://api.cloudinary.com/v1_1/dhpnudwl9/image/upload`,
+        formData
+      );
+      console.log(res);
+      setUserDetails({ ...userDetails, pic: res.data.url });
+      setLoading(false);
+    } else {
+      console.log("select a image");
+      setLoading(false);
+    }
+    setLoading(false);
+  };
+
+  const handleChange = async (e: any): Promise<void> => {
     if (e.target.name === "pic") {
-      setUserDetails({ ...userDetails, pic: e.target.files[0] });
+      imageUpload(e.target.files[0]);
+      return;
     }
     setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
   };
-  const handleSubmit = (e: any): void => {
+  const handleSubmit = async (e: any): Promise<void> => {
     e.preventDefault();
-    console.log(userDetails);
+    try {
+      const res = await axiosClient.post("/user/signup", userDetails);
+      return console.log(res);
+    } catch (error: any) {
+      if (error.response.status === 401) {
+        return console.log("user already exists");
+      }
+      console.log(error);
+    }
   };
   return (
     <div className="login-container h-screen w-screen bg-[url('/darkForest.png')] bg-no-repeat bg-center bg-cover flex flex-col justify-center items-center">
