@@ -1,5 +1,8 @@
 import { useState } from "react";
 import axiosClient from "../axios/axiosClient";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { AuthUser } from "../hooks/contextHooks";
 
 type userDetails = {
   name: string;
@@ -7,22 +10,31 @@ type userDetails = {
 };
 
 export default function LoginPage() {
+  const auth = AuthUser();
   const [userDetails, setUserDetails] = useState<userDetails>({
     name: "",
     password: "",
   });
+
+  const navigate = useNavigate();
+
   const handleChange = async (e: any): Promise<void> => {
     setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = async (e: any): Promise<void> => {
     e.preventDefault();
     console.log(userDetails);
 
     try {
       const res = await axiosClient.post("/user/login", userDetails);
+      toast.success(res.data.message);
+      navigate("/chats");
+      auth?.login(res.data.user);
       console.log(res);
     } catch (error: any) {
       if (error.response.status === 401) {
+        toast.error(error.response.data.message);
         return console.log(error.response.data.message);
       }
       console.log(error);
