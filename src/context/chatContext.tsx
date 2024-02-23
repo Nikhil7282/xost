@@ -1,12 +1,14 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
+import { addLocalStorage, removeLocalStorage } from "../hooks/storageHooks";
 
 export type UserAuth = {
   user: User | null;
   isLoggedIn: boolean;
   login: (user: User) => void;
+  logout: () => void;
 };
 
-type User = {
+export type User = {
   name: string;
   email: string;
   pic: string;
@@ -27,13 +29,20 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const login = async (user: User) => {
     setUser(user);
     setIsLoggedIn(true);
-    localStorage.setItem("userInfo", JSON.stringify(user));
+    addLocalStorage("userInfo", JSON.stringify(user));
+  };
+
+  const logout = async () => {
+    setUser(null);
+    setIsLoggedIn(false);
+    removeLocalStorage("userInfo");
   };
 
   const value = {
     user,
     isLoggedIn,
     login,
+    logout,
   };
   return <Authcontext.Provider value={value}>{children}</Authcontext.Provider>;
 };
