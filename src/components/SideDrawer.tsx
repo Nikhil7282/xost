@@ -14,12 +14,13 @@ import {
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useState } from "react";
-import { AuthUser } from "../hooks/contextHooks";
+import { useAuthUser } from "../hooks/contextHooks";
 import ProfileModel from "./ProfileModel";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import UsersLoader from "./Loader/UsersLoader";
 import UserListItem from "./UserListItem";
+import { axiosSearchUsers } from "../axios/axiosClient";
 
 export type SearchUser = {
   _id: string;
@@ -76,7 +77,7 @@ const arr = [
 ];
 
 function SideDrawer() {
-  const auth = AuthUser();
+  const auth = useAuthUser();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState(arr);
@@ -106,16 +107,19 @@ function SideDrawer() {
   };
 
   //search users
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!search) {
       toast("Please Enter Something", {
         icon: "⚠️",
       });
       return;
     }
-
     try {
       setLoading(true);
+      let res = await axiosSearchUsers(search);
+      setSearchResult(res);
+      // console.log(res);
+      setLoading(false);
     } catch (error: any) {
       setLoading(false);
       toast.error(error.response.data.message);
@@ -234,7 +238,7 @@ function SideDrawer() {
                 <UsersLoader />
               </ListItem>
             ) : (
-              searchResult?.map((user: SearchUser) => (
+              searchResult?.map((user: any) => (
                 <UserListItem key={user._id} user={user} />
               ))
             )}
