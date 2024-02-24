@@ -2,7 +2,7 @@ import { useState } from "react";
 import axiosClient from "../axios/axiosClient";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthUser } from "../hooks/contextHooks";
+import { useAuthUser } from "../hooks/contextHooks";
 import { Box, Button, TextField, Typography } from "@mui/material";
 
 type userDetails = {
@@ -11,7 +11,7 @@ type userDetails = {
 };
 
 export default function LoginPage() {
-  const auth = AuthUser();
+  const auth = useAuthUser();
   const [userDetails, setUserDetails] = useState<userDetails>({
     name: "",
     password: "",
@@ -25,14 +25,14 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: any): Promise<void> => {
     e.preventDefault();
-    console.log(userDetails);
+    // console.log(userDetails);
 
     try {
       const res = await axiosClient.post("/user/login", userDetails);
       toast.success(res.data.message);
       navigate("/chats");
-      auth?.login(res.data.user);
-      console.log(res);
+      auth?.login(res.data.user, res.data.token);
+      // console.log(res);
     } catch (error: any) {
       if (error.response.status === 401) {
         toast.error(error.response.data.message);

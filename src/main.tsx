@@ -5,7 +5,8 @@ import "./index.css";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import ChatProvider from "./context/chatContext.tsx";
+import AuthProvider from "./context/AuthContext.tsx";
+import ChatsProvider from "./context/ChatContext.tsx";
 
 const theme = createTheme({
   typography: {
@@ -15,13 +16,15 @@ const theme = createTheme({
 });
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ChatProvider>
-      <Router>
-        <ThemeProvider theme={theme}>
-          <Toaster />
-          <App />
-        </ThemeProvider>
-      </Router>
-    </ChatProvider>
+    <AuthProvider>
+      <ChatsProvider>
+        <Router>
+          <ThemeProvider theme={theme}>
+            <Toaster />
+            <App />
+          </ThemeProvider>
+        </Router>
+      </ChatsProvider>
+    </AuthProvider>
   </React.StrictMode>
 );

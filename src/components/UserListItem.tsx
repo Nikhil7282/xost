@@ -1,14 +1,38 @@
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import { SearchUser } from "./SideDrawer";
+import { useAuthChat } from "../hooks/contextHooks";
+import { axiosAccessChats } from "../axios/axiosClient";
+import { useState } from "react";
+import { CircularProgress } from "@mui/material";
 
-const UserListItem = (user: any) => {
-  // console.log(user);
+const UserListItem = ({ user }: any) => {
+  const chat = useAuthChat();
+  const [loading, setLoading] = useState(false);
+  // console.log(chat);
+
+  const accessChat = async () => {
+    try {
+      setLoading(true);
+      const res = await axiosAccessChats(user._id);
+      console.log(res);
+      let isExists = chat?.chats?.find((ch) => ch._id === res.chat[0]._id);
+      if (!isExists) {
+        chat?.setChats(res.chat[0]);
+        console.log(chat);
+      }
+      setLoading(false);
+      // console.log(find ? true : false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
   return (
     <Box
       key={user._id}
-      // onClick={handleFunction}
+      onClick={accessChat}
       sx={{
         cursor: "pointer",
         backgroundColor: "#E8E8E8",
@@ -31,13 +55,19 @@ const UserListItem = (user: any) => {
         alt={user?.name}
         src={user?.pic || ""}
       />
-      <Box>
-        <Typography variant="body1">{user.name}</Typography>
-        <Typography variant="caption">
-          <b>Email : </b>
-          {user?.email}
-        </Typography>
-      </Box>
+      {loading ? (
+        <Box sx={{ display: "flex" }}>
+          <CircularProgress color="inherit" />
+        </Box>
+      ) : (
+        <Box>
+          <Typography variant="body1">{user.name}</Typography>
+          <Typography variant="caption">
+            <b>Email : </b>
+            {user?.email}
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 };

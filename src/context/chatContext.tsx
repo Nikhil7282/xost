@@ -1,50 +1,55 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
-import { addLocalStorage, removeLocalStorage } from "../hooks/storageHooks";
+import { ReactNode, createContext, useEffect, useState } from "react";
+import { User } from "./AuthContext";
+import { axiosFetchChats } from "../axios/axiosClient";
 
-export type UserAuth = {
-  user: User | null;
-  isLoggedIn: boolean;
-  login: (user: User) => void;
-  logout: () => void;
+type ChatAuth = {
+  chats: Chat[] | null;
+  setChats: React.Dispatch<React.SetStateAction<Chat[] | null>>;
 };
 
-export type User = {
+type GroupAdmin = {
+  _id: string;
   name: string;
+  password: string;
   email: string;
   pic: string;
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
 };
 
-export const Authcontext = createContext<UserAuth | null>(null);
+export type Chat = {
+  _id: string;
+  chatName: string;
+  isGroupChat: boolean;
+  users: User[];
+  groupAdmin: GroupAdmin;
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
+};
 
-export const ChatProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+export const chatContext = createContext<ChatAuth | null>(null);
+
+const ChatsProvider = ({ children }: { children: ReactNode }) => {
+  const [chats, setChats] = useState<Chat[] | null>(null);
+  // const [selectedChat, setSelectedCjat] = useState(null);
+
+  const fetchChats = async () => {
+    let res = await axiosFetchChats();
+    // console.log(res);
+    setChats(res);
+  };
 
   useEffect(() => {
-    const userInfo =
-      JSON.parse(localStorage.getItem("userInfo") ?? "null") ?? "";
-    setUser(userInfo);
+    fetchChats();
   }, []);
 
-  const login = async (user: User) => {
-    setUser(user);
-    setIsLoggedIn(true);
-    addLocalStorage("userInfo", JSON.stringify(user));
-  };
-
-  const logout = async () => {
-    setUser(null);
-    setIsLoggedIn(false);
-    removeLocalStorage("userInfo");
-  };
-
   const value = {
-    user,
-    isLoggedIn,
-    login,
-    logout,
+    chats,
+    setChats,
   };
-  return <Authcontext.Provider value={value}>{children}</Authcontext.Provider>;
+  return <chatContext.Provider value={value}>{children}</chatContext.Provider>;
 };
 
-export default ChatProvider;
+export default ChatsProvider;

@@ -1,9 +1,10 @@
 import { useEffect } from "react";
-import { AuthUser } from "../hooks/contextHooks";
+import { useAuthUser } from "../hooks/contextHooks";
 import SideDrawer from "../components/SideDrawer";
+import MyChat from "../components/MyChat";
 
 function ChatPage() {
-  const auth = AuthUser();
+  const auth = useAuthUser();
 
   useEffect(() => {
     console.log(auth);
@@ -14,7 +15,7 @@ function ChatPage() {
       {auth?.user && <SideDrawer />}
       <div className="flex justify-between w-full h-91.5vh p-10">
         {
-          auth?.user && <div>my chats</div>
+          auth?.user && <MyChat />
           // <MyChats fetchAgain={fetchAgain} />
         }
         {
