@@ -7,6 +7,7 @@ import { Chat } from "../context/ChatContext";
 import { User } from "../context/AuthContext";
 import { getLocalStorage } from "../hooks/storageHooks";
 import toast from "react-hot-toast";
+import AddGroupModel from "./Models/AddGroupModel";
 
 function MyChat() {
   const chat = useAuthChat();
@@ -42,12 +43,8 @@ function MyChat() {
         alignItems="center"
       >
         <Typography variant="h6">My Chats</Typography>
-        <Button
-          // fontSize={{ xs: "17px", md: "10px", lg: "17px" }}
-          endIcon={<AddIcon />}
-        >
-          New Group Chat
-        </Button>
+        <AddGroupModel>New Group</AddGroupModel>
+        {/* <Button endIcon={<AddIcon />}>New Group Chat</Button> */}
 
         {/* <GroupChatModal>
           <Button

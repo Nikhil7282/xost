@@ -15,7 +15,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useState } from "react";
 import { useAuthUser } from "../hooks/contextHooks";
-import ProfileModel from "./ProfileModel";
+import ProfileModel from "./Models/ProfileModel";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import UsersLoader from "./Loader/UsersLoader";
