@@ -34,6 +34,7 @@ const UserListItem = ({ user }: any) => {
       key={user._id}
       onClick={accessChat}
       sx={{
+        height: "70px",
         cursor: "pointer",
         backgroundColor: "#E8E8E8",
         "&:hover": {
@@ -57,7 +58,7 @@ const UserListItem = ({ user }: any) => {
       />
       {loading ? (
         <Box sx={{ display: "flex" }}>
-          <CircularProgress color="inherit" />
+          <CircularProgress color="inherit" size={30} />
         </Box>
       ) : (
         <Box>

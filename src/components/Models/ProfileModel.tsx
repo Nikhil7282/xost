@@ -1,7 +1,7 @@
 import { Backdrop, Box, Button, Fade, Modal, Typography } from "@mui/material";
 import { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { User } from "../context/AuthContext";
+import { User } from "../../context/AuthContext";
 
 const style = {
   position: "absolute",
