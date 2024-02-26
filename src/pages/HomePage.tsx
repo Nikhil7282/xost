@@ -6,7 +6,7 @@ function HomePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userInfo = JSON.parse(getLocalStorage("userInfo") || '""');
+    const userInfo = getLocalStorage("userInfo");
     if (userInfo) {
       navigate("/chats");
     } else {

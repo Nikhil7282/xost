@@ -8,11 +8,11 @@ import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import { User } from "../../context/AuthContext";
 import { useAuthChat } from "../../hooks/contextHooks";
-import { TextField } from "@mui/material";
-import { axiosSearchUsers } from "../../axios/axiosClient";
+import { Avatar, TextField } from "@mui/material";
+import { axiosCreateGroup, axiosSearchUsers } from "../../axios/axiosClient";
 import { CircularProgress } from "@mui/material";
-import UserListItem from "../UserListItem";
 import toast from "react-hot-toast";
+import UserBadge from "../UserBadge";
 
 const style = {
   position: "absolute" as "absolute",
@@ -39,10 +39,12 @@ export default function AddGroupModel({ children }: Props) {
   const chat = useAuthChat();
 
   const [groupName, setGroupName] = useState<string>("");
-  const [selectedUsers, setSelectedUsers] = useState<User[] | null>(null);
+  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
   const [searchUsers, setSearchUsers] = useState("");
   const [searchResults, setSearchResults] = useState<User[] | null>(null);
   const [loading, setLoading] = useState(false);
+  const [createLoading, setCreateLoading] = useState(false);
+  // console.log(selectedUsers);
 
   useEffect(() => {
     const getUsers = setTimeout(async () => {
@@ -54,12 +56,14 @@ export default function AddGroupModel({ children }: Props) {
       // console.log(res);
       setSearchResults(res);
       setLoading(false);
-    }, 2000);
+    }, 1000);
 
     return () => clearTimeout(getUsers);
   }, [searchUsers]);
 
   const handleGroup = async (userToAdd: User) => {
+    // console.log("handleGroup", userToAdd);
+
     if (selectedUsers?.includes(userToAdd)) {
       toast("User Already Added", {
         icon: "⚠️",
@@ -68,10 +72,39 @@ export default function AddGroupModel({ children }: Props) {
     }
     if (selectedUsers != null) {
       setSelectedUsers([...selectedUsers, userToAdd]);
+      // console.log(selectedUsers);
     }
   };
 
-  const createGroup = async () => {};
+  const handleDelete = async (delUser: User) => {
+    setSelectedUsers(selectedUsers.filter((user) => user._id !== delUser._id));
+  };
+
+  const createGroup = async () => {
+    if (!groupName) {
+      toast("Please enter a group name", {
+        icon: "⚠️",
+      });
+      return;
+    }
+    if (selectedUsers.length < 1) {
+      toast("Atleast select 2 users", {
+        icon: "⚠️",
+      });
+      return;
+    }
+    try {
+      setCreateLoading(true);
+      const res = await axiosCreateGroup(groupName, selectedUsers);
+      setCreateLoading(false);
+      chat?.setChats([res.data, ...(chat.chats || [])]);
+      toast.success(res.message);
+    } catch (error: any) {
+      setCreateLoading(false);
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
 
   //model state
   const [open, setOpen] = useState(false);
@@ -127,6 +160,15 @@ export default function AddGroupModel({ children }: Props) {
                   onChange={(e) => setSearchUsers(e.target.value)}
                 />
               </Box>
+              <Box>
+                {selectedUsers?.map((user: any) => (
+                  <UserBadge
+                    key={user._id}
+                    user={user}
+                    handleFunction={() => handleDelete(user)}
+                  />
+                ))}
+              </Box>
               <Box
                 sx={{
                   display: "flex",
@@ -138,13 +180,54 @@ export default function AddGroupModel({ children }: Props) {
               >
                 {loading && <CircularProgress />}
                 {searchResults?.slice(0, 3)?.map((user) => {
-                  return <UserListItem key={user._id} user={user} />;
+                  return (
+                    <Box
+                      key={user._id}
+                      onClick={() => handleGroup(user)}
+                      sx={{
+                        height: "70px",
+                        cursor: "pointer",
+                        backgroundColor: "#E8E8E8",
+                        "&:hover": {
+                          backgroundColor: "#38B2AC",
+                          color: "white",
+                        },
+                        width: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        color: "black",
+                        px: 3,
+                        py: 2,
+                        mb: 2,
+                        borderRadius: "12px",
+                      }}
+                    >
+                      <Avatar
+                        sx={{ mr: 2, cursor: "pointer" }}
+                        alt={user?.name}
+                        src={user?.pic || ""}
+                      />
+                      {loading ? (
+                        <Box sx={{ display: "flex" }}>
+                          <CircularProgress color="inherit" size={30} />
+                        </Box>
+                      ) : (
+                        <Box>
+                          <Typography variant="body1">{user.name}</Typography>
+                        </Box>
+                      )}
+                    </Box>
+                  );
                 })}
               </Box>
               <Box mt={2}>
                 {" "}
                 <Button variant="contained" onClick={createGroup}>
-                  Create
+                  {createLoading ? (
+                    <CircularProgress color="inherit" size={25} />
+                  ) : (
+                    "Create"
+                  )}
                 </Button>
                 <Button onClick={() => setOpen(false)}>Close</Button>
               </Box>
