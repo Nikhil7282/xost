@@ -1,5 +1,10 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { addLocalStorage, removeLocalStorage } from "../hooks/storageHooks";
+import {
+  addLocalStorage,
+  getLocalStorage,
+  removeLocalStorage,
+} from "../hooks/storageHooks";
+import { setBearerToken } from "../axios/axiosClient";
 
 export type UserAuth = {
   user: User | null;
@@ -25,16 +30,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const userInfo =
-      JSON.parse(localStorage.getItem("userInfo") ?? "null") ?? "";
+    const userInfo = getLocalStorage("userInfo");
     setUser(userInfo);
   }, []);
 
   const login = async (user: User, token: string) => {
+    addLocalStorage("userInfo", user);
+    addLocalStorage("token", token);
     setUser(user);
     setIsLoggedIn(true);
-    addLocalStorage("userInfo", JSON.stringify(user));
-    addLocalStorage("token", token);
   };
 
   const logout = async () => {

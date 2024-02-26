@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useAuthUser } from "../hooks/contextHooks";
 import SideDrawer from "../components/SideDrawer";
 import MyChat from "../components/MyChat";
+import ChatBox from "../components/ChatBox";
 
 function ChatPage() {
   const auth = useAuthUser();
@@ -19,7 +20,7 @@ function ChatPage() {
           // <MyChats fetchAgain={fetchAgain} />
         }
         {
-          auth?.user && <div>chatbox</div>
+          auth?.user && <ChatBox />
           // (<Chatbox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />)
         }
       </div>

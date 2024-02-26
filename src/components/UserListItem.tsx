@@ -30,46 +30,47 @@ const UserListItem = ({ user }: any) => {
   };
 
   return (
-    <Box
-      key={user._id}
-      onClick={accessChat}
-      sx={{
-        height: "70px",
-        cursor: "pointer",
-        backgroundColor: "#E8E8E8",
-        "&:hover": {
-          backgroundColor: "#38B2AC",
-          color: "white",
-        },
-        width: "100%",
-        display: "flex",
-        alignItems: "center",
-        color: "black",
-        px: 3,
-        py: 2,
-        mb: 2,
-        borderRadius: "12px",
-      }}
-    >
-      <Avatar
-        sx={{ mr: 2, cursor: "pointer" }}
-        alt={user?.name}
-        src={user?.pic || ""}
-      />
-      {loading ? (
-        <Box sx={{ display: "flex" }}>
-          <CircularProgress color="inherit" size={30} />
-        </Box>
-      ) : (
-        <Box>
-          <Typography variant="body1">{user.name}</Typography>
-          <Typography variant="caption">
-            <b>Email : </b>
-            {user?.email}
-          </Typography>
-        </Box>
-      )}
-    </Box>
+    <div>
+      <Box
+        onClick={accessChat}
+        sx={{
+          height: "70px",
+          cursor: "pointer",
+          backgroundColor: "#E8E8E8",
+          "&:hover": {
+            backgroundColor: "#38B2AC",
+            color: "white",
+          },
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          color: "black",
+          px: 3,
+          py: 2,
+          mb: 2,
+          borderRadius: "12px",
+        }}
+      >
+        <Avatar
+          sx={{ mr: 2, cursor: "pointer" }}
+          alt={user?.name}
+          src={user?.pic || ""}
+        />
+        {loading ? (
+          <Box sx={{ display: "flex" }}>
+            <CircularProgress color="inherit" size={30} />
+          </Box>
+        ) : (
+          <Box>
+            <Typography variant="body1">{user.name}</Typography>
+            <Typography variant="caption">
+              <b>Email : </b>
+              {user?.email}
+            </Typography>
+          </Box>
+        )}
+      </Box>
+    </div>
   );
 };
 
