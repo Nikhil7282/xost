@@ -1,4 +1,12 @@
-import { Backdrop, Box, Button, Fade, Modal, Typography } from "@mui/material";
+import {
+  Avatar,
+  Backdrop,
+  Box,
+  Button,
+  Fade,
+  Modal,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { User } from "../../context/AuthContext";
@@ -57,7 +65,11 @@ function ProfileModel({ children, user }: Props) {
                   {user?.name}
                 </Typography>
                 <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-                  <img src={user?.pic} alt={user?.name} width="150px" />
+                  <Avatar
+                    src={user?.pic}
+                    alt={user?.name}
+                    sx={{ width: "150px", height: "150px" }}
+                  />
                 </Typography>
                 <Typography mt={3} mb={3}>
                   {user?.email}
@@ -71,7 +83,11 @@ function ProfileModel({ children, user }: Props) {
         </Modal>
       ) : (
         <Button onClick={() => setOpen(true)}>
-          {children ? <span>{children}</span> : <VisibilityIcon />}
+          {children ? (
+            <span>{children}</span>
+          ) : (
+            <Avatar src={user?.pic} alt={user?.name} />
+          )}
         </Button>
       )}
     </>
