@@ -1,18 +1,21 @@
 import { Box } from "@mui/material";
 import { useAuthChat } from "../hooks/contextHooks";
+import SingleChat from "./SingleChat";
 
 function ChatBox() {
   const chat = useAuthChat();
   return (
     <Box
-      display={{ base: chat?.selectedChat ? "flex" : "none", md: "flex" }}
+      display={{ xs: chat?.selectedChat ? "flex" : "none", md: "flex" }}
       alignItems="center"
       flexDirection="column"
       padding={3}
       bgcolor="white"
       width={{ base: "100%", md: "68%" }}
       borderRadius="lg"
-    ></Box>
+    >
+      <SingleChat />
+    </Box>
   );
 }
 
