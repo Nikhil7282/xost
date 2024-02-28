@@ -13,6 +13,7 @@ import { axiosCreateGroup, axiosSearchUsers } from "../../axios/axiosClient";
 import { CircularProgress } from "@mui/material";
 import toast from "react-hot-toast";
 import UserBadge from "../UserBadge";
+import UserListItem from "../UserListItem";
 
 const style = {
   position: "absolute" as "absolute",
@@ -62,8 +63,6 @@ export default function AddGroupModel({ children }: Props) {
   }, [searchUsers]);
 
   const handleGroup = async (userToAdd: User) => {
-    // console.log("handleGroup", userToAdd);
-
     if (selectedUsers?.includes(userToAdd)) {
       toast("User Already Added", {
         icon: "⚠️",
@@ -72,7 +71,6 @@ export default function AddGroupModel({ children }: Props) {
     }
     if (selectedUsers != null) {
       setSelectedUsers([...selectedUsers, userToAdd]);
-      // console.log(selectedUsers);
     }
   };
 
@@ -181,42 +179,11 @@ export default function AddGroupModel({ children }: Props) {
                 {loading && <CircularProgress />}
                 {searchResults?.slice(0, 3)?.map((user) => {
                   return (
-                    <Box
+                    <UserListItem
                       key={user._id}
-                      onClick={() => handleGroup(user)}
-                      sx={{
-                        height: "70px",
-                        cursor: "pointer",
-                        backgroundColor: "#E8E8E8",
-                        "&:hover": {
-                          backgroundColor: "#38B2AC",
-                          color: "white",
-                        },
-                        width: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        color: "black",
-                        px: 3,
-                        py: 2,
-                        mb: 2,
-                        borderRadius: "12px",
-                      }}
-                    >
-                      <Avatar
-                        sx={{ mr: 2, cursor: "pointer" }}
-                        alt={user?.name}
-                        src={user?.pic || ""}
-                      />
-                      {loading ? (
-                        <Box sx={{ display: "flex" }}>
-                          <CircularProgress color="inherit" size={30} />
-                        </Box>
-                      ) : (
-                        <Box>
-                          <Typography variant="body1">{user.name}</Typography>
-                        </Box>
-                      )}
-                    </Box>
+                      user={user}
+                      handleFunction={() => handleGroup(user)}
+                    />
                   );
                 })}
               </Box>

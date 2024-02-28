@@ -14,13 +14,14 @@ import {
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useState } from "react";
-import { useAuthUser } from "../hooks/contextHooks";
+import { useAuthChat, useAuthUser } from "../hooks/contextHooks";
 import ProfileModel from "./Models/ProfileModel";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import UsersLoader from "./Loader/UsersLoader";
 import UserListItem from "./UserListItem";
-import { axiosSearchUsers } from "../axios/axiosClient";
+import { axiosAccessChats, axiosSearchUsers } from "../axios/axiosClient";
+import { User } from "../context/AuthContext";
 
 export type SearchUser = {
   _id: string;
@@ -78,6 +79,7 @@ const arr = [
 
 function SideDrawer() {
   const auth = useAuthUser();
+  const chat = useAuthChat();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState(arr);
@@ -93,6 +95,7 @@ function SideDrawer() {
   //mui menu state
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
+
   const handleMenuClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
   };
@@ -125,6 +128,21 @@ function SideDrawer() {
       toast.error(error.response.data.message);
       console.log(error);
       return;
+    }
+  };
+
+  //access users
+  const accessChat = async (user: User) => {
+    try {
+      const res = await axiosAccessChats(user._id || "");
+      console.log(res);
+      let isExists = chat?.chats?.find((ch) => ch._id === res.chat[0]._id);
+      if (!isExists) {
+        chat?.setChats(res.chat[0]);
+        console.log(chat);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -239,7 +257,11 @@ function SideDrawer() {
               </ListItem>
             ) : (
               searchResult?.map((user: any) => (
-                <UserListItem key={user._id} user={user} />
+                <UserListItem
+                  key={user._id}
+                  user={user}
+                  handleFunction={() => accessChat(user)}
+                />
               ))
             )}
           </List>

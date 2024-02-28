@@ -38,4 +38,28 @@ export const axiosCreateGroup = async (groupName: string, users: User[]) => {
   });
   return res.data;
 };
+
+export const axiosGroupName = async (chatId: string, newName: string) => {
+  const res = await axiosClient.put("/chats/renameGroup", {
+    chatId,
+    chatName: newName,
+  });
+  return res.data;
+};
+
+export const axiosAddToGroup = async (chatId: string, userId: string) => {
+  const res = await axiosClient.put("/chats/addToGroup", {
+    userId,
+    chatId,
+  });
+  return res.data;
+};
+
+export const axiosDeleteFromGroup = async (chatId: string, userId: string) => {
+  const res = await axiosClient.put("chats/removeFromGroup", {
+    userId,
+    chatId,
+  });
+  return res.data;
+};
 export default axiosClient;

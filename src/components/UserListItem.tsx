@@ -1,38 +1,29 @@
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import { useAuthChat } from "../hooks/contextHooks";
-import { axiosAccessChats } from "../axios/axiosClient";
 import { useState } from "react";
 import { CircularProgress } from "@mui/material";
+import { User } from "../context/AuthContext";
 
-const UserListItem = ({ user }: any) => {
-  const chat = useAuthChat();
+type Prop = {
+  user: User;
+  handleFunction: (user: User) => void;
+};
+
+const UserListItem = ({ user, handleFunction }: Prop) => {
   const [loading, setLoading] = useState(false);
-  // console.log(chat);
+  // console.log(handleFunction);
 
-  const accessChat = async () => {
-    try {
-      setLoading(true);
-      const res = await axiosAccessChats(user._id);
-      console.log(res);
-      let isExists = chat?.chats?.find((ch) => ch._id === res.chat[0]._id);
-      if (!isExists) {
-        chat?.setChats(res.chat[0]);
-        console.log(chat);
-      }
-      setLoading(false);
-      // console.log(find ? true : false);
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
-    }
+  const functionCall = async () => {
+    setLoading(true);
+    handleFunction(user);
+    setLoading(false);
   };
 
   return (
     <div>
       <Box
-        onClick={accessChat}
+        onClick={functionCall}
         sx={{
           height: "70px",
           cursor: "pointer",

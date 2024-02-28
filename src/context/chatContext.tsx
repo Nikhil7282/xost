@@ -54,7 +54,7 @@ const ChatsProvider = ({ children }: { children: ReactNode }) => {
     if (userInfo) {
       fetchChats();
     }
-  }, [auth?.user, fetchChatAgain]);
+  }, [auth?.user, fetchChatAgain, selectedChat]);
 
   const value = {
     chats,
