@@ -1,7 +1,6 @@
 import axios from "axios";
 import { User } from "../context/AuthContext";
 import { getLocalStorage } from "../hooks/storageHooks";
-let token = getLocalStorage("token");
 
 const axiosClient = axios.create();
 axiosClient.defaults.baseURL = "http://localhost:3000/api";
@@ -10,7 +9,9 @@ axiosClient.defaults.timeout = 2000;
 axiosClient.defaults.withCredentials = true;
 
 export const setBearerToken = () => {
-  axiosClient.defaults.headers.common = { Authorization: `Bearer ${token}` };
+  axiosClient.defaults.headers.common = {
+    Authorization: `Bearer ${getLocalStorage("token")}`,
+  };
 };
 
 export const axiosSearchUsers = async (query?: string) => {
@@ -60,6 +61,19 @@ export const axiosDeleteFromGroup = async (chatId: string, userId: string) => {
     userId,
     chatId,
   });
+  return res.data;
+};
+
+export const axiosSendMessage = async (content: string, chatId: string) => {
+  const res = await axiosClient.post("/messages", {
+    content,
+    chatId,
+  });
+  return res.data;
+};
+
+export const axiosGetAllMessages = async (chatId: string) => {
+  const res = await axiosClient.get(`/messages/${chatId}`);
   return res.data;
 };
 export default axiosClient;

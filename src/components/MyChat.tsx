@@ -49,6 +49,7 @@ function MyChat() {
         width="100%"
         height="100%"
         borderRadius="lg"
+        sx={{ overflow: "scroll" }}
       >
         {chat?.chats ? (
           <Stack>
