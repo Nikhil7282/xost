@@ -184,33 +184,9 @@ function SideDrawer() {
               />
             }
           >
-            <Avatar
-              // size="sm"
-              // cursor="pointer"
-              alt={auth?.user?.name}
-              src={auth?.user?.pic}
-            />
+            <Avatar alt={auth?.user?.name} src={auth?.user?.pic} />
           </Button>
-          <Menu open={false}>
-            {/* <MenuList
-            pl={2}
-            >
-              {!notification.length && "No New Messages"}
-              {notification.map((notif) => (
-                // <MenuItem
-                //   key={notif._id}
-                //   onClick={() => {
-                //     setSelectedChat(notif.chat);
-                //     setNotification(notification.filter((n) => n !== notif));
-                //   }}
-                // >
-                //   {notif.chat.isGroupChat
-                    ? `New Message in ${notif.chat.chatName}`
-                //     : `New Message from ${getSender(user, notif.chat.users)}`}
-                // </MenuItem>
-              ))}
-            </MenuList> */}
-          </Menu>
+          <Menu open={false}></Menu>
           <Menu
             open={open}
             id="profile"
