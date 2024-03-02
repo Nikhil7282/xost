@@ -2,8 +2,10 @@ import axios from "axios";
 import { User } from "../context/AuthContext";
 import { getLocalStorage } from "../hooks/storageHooks";
 
+export const endPoint = "http://localhost:3000";
+
 const axiosClient = axios.create();
-axiosClient.defaults.baseURL = "http://localhost:3000/api";
+axiosClient.defaults.baseURL = `${endPoint}/api`;
 axiosClient.defaults.headers["Content-Type"] = "application/json";
 axiosClient.defaults.timeout = 2000;
 axiosClient.defaults.withCredentials = true;

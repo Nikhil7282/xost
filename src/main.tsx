@@ -7,6 +7,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import AuthProvider from "./context/AuthContext.tsx";
 import ChatsProvider from "./context/ChatContext.tsx";
+import SocketProvider from "./context/SocketContext.tsx";
 
 const theme = createTheme({
   typography: {
@@ -20,8 +21,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <AuthProvider>
         <ChatsProvider>
           <ThemeProvider theme={theme}>
-            <Toaster />
-            <App />
+            <SocketProvider>
+              <Toaster />
+              <App />
+            </SocketProvider>
           </ThemeProvider>
         </ChatsProvider>
       </AuthProvider>

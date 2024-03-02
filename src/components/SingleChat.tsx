@@ -1,13 +1,15 @@
 import { Box, Button, FormControl, TextField, Typography } from "@mui/material";
-import { useAuthChat, useAuthUser } from "../hooks/contextHooks";
+import { useAuthChat, useAuthUser, useSocket } from "../hooks/contextHooks";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useGetSender, useGetSenderObject } from "../hooks/senderHooks";
 import ProfileModel from "./Models/ProfileModel";
 import UpdateGroupChatModel from "./Models/UpdateGroupChatModel";
 import { useEffect, useState } from "react";
-import { axiosGetAllMessages, axiosSendMessage } from "../axios/axiosClient";
+import {
+  axiosGetAllMessages,
+  axiosSendMessage,
+} from "../axios/axiosClient";
 import Chat from "./Chat";
-import { Socket, io } from "socket.io-client";
 
 export type Message = {
   _id: string;
@@ -15,37 +17,35 @@ export type Message = {
   chatId: string;
   sender: string;
 };
-
-const ENDPOINT = "http://localhost:3000";
-
 function SingleChat() {
-  let socket: any;
-  const auth = useAuthUser();
   const chat = useAuthChat();
-
+  const socket = useSocket();
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
   const [socketConnected, setSocketConnected] = useState(false);
+  const [typing, setTyping] = useState(false);
 
   useEffect(() => {
+    socket.on("connected", () => setSocketConnected(true));
     fetchMessages();
   }, [chat?.selectedChat]);
 
   useEffect(() => {
-    socket = io(ENDPOINT);
-    socket.emit("setup", auth?.user);
-    socket.on("connected", () => setSocketConnected(true));
-  }, []);
+    socket.on("receive-message", (message: Message) => {
+      setMessages([...messages, message]);
+    });
+  }, [socket]);
 
   const fetchMessages = async () => {
+    // console.log(socket);
     if (!chat?.selectedChat) {
       return;
     }
     try {
       const res = await axiosGetAllMessages(chat?.selectedChat._id || "");
       setMessages(res.data);
-      socket.emit("join-room", chat?.selectedChat._id);
+      await socket.emit("join-room", chat?.selectedChat._id);
     } catch (error) {}
   };
 
@@ -57,8 +57,9 @@ function SingleChat() {
           newMessage,
           chat?.selectedChat?._id || ""
         );
-        console.log(res);
+        // console.log(res);
         setMessages([...messages, res.data]);
+        await socket.emit("send-message", res.data);
       } catch (error: any) {
         console.log(error);
       }

@@ -4,6 +4,21 @@
   padding: 0;
 }
 
+.scrollable {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: column;
+  width: 100%;
+}
+.messageItem {
+  /* display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: column; */
+  width: 100%;
+}
+
 ::-webkit-scrollbar {
   width: 0px;
 }
