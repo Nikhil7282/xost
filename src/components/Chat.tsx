@@ -11,6 +11,7 @@ function Chat({ messages }: Prop) {
   const auth = useAuthUser();
   return (
     <Box
+      className="chattingBox"
       sx={{
         width: "100%",
         display: "flex",
@@ -20,10 +21,10 @@ function Chat({ messages }: Prop) {
         border: "1px solid black",
       }}
     >
-      <ScrollableFeed>
+      <ScrollableFeed className="scrollable">
         {messages &&
           messages.map((m: Message) => (
-            <div key={m._id}>
+            <div key={m._id} className="messageItem">
               <span
                 style={{
                   backgroundColor: `${
@@ -34,7 +35,7 @@ function Chat({ messages }: Prop) {
                   padding: "5px 10px",
                   maxWidth: "70%",
                   //@ts-ignore
-                  marginLeft: `${m.sender === auth?.user?.id ? "33px" : "0"}`,
+                  marginLeft: `${m.sender === auth?.user?.id ? "303px" : "0"}`,
                 }}
               >
                 {m.content}
