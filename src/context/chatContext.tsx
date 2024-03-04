@@ -5,10 +5,10 @@ import { getLocalStorage } from "../hooks/storageHooks";
 import { useAuthUser } from "../hooks/contextHooks";
 
 type ChatAuth = {
-  chats: Chat[] | null;
-  setChats: React.Dispatch<React.SetStateAction<Chat[] | null>>;
-  selectedChat: Chat | null;
-  setSelectedChat: React.Dispatch<React.SetStateAction<Chat | null>>;
+  chats: ChatType[] | null;
+  setChats: React.Dispatch<React.SetStateAction<ChatType[] | null>>;
+  selectedChat: ChatType | null;
+  setSelectedChat: React.Dispatch<React.SetStateAction<ChatType | null>>;
   fetchChatAgain: boolean;
   setFetchChatAgain: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -24,7 +24,7 @@ type GroupAdmin = {
   __v?: number;
 };
 
-export type Chat = {
+export type ChatType = {
   _id: string;
   chatName: string;
   isGroupChat: boolean;
@@ -38,8 +38,8 @@ export type Chat = {
 export const chatContext = createContext<ChatAuth | null>(null);
 
 const ChatsProvider = ({ children }: { children: ReactNode }) => {
-  const [chats, setChats] = useState<Chat[] | null>(null);
-  const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
+  const [chats, setChats] = useState<ChatType[] | null>(null);
+  const [selectedChat, setSelectedChat] = useState<ChatType | null>(null);
   const [fetchChatAgain, setFetchChatAgain] = useState(false);
   const auth = useAuthUser();
   // console.log("context:", auth);

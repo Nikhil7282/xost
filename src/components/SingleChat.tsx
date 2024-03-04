@@ -5,37 +5,57 @@ import { useGetSender, useGetSenderObject } from "../hooks/senderHooks";
 import ProfileModel from "./Models/ProfileModel";
 import UpdateGroupChatModel from "./Models/UpdateGroupChatModel";
 import { useEffect, useState } from "react";
-import {
-  axiosGetAllMessages,
-  axiosSendMessage,
-} from "../axios/axiosClient";
+import { axiosGetAllMessages, axiosSendMessage } from "../axios/axiosClient";
 import Chat from "./Chat";
+import { ChatType } from "../context/ChatContext";
 
 export type Message = {
   _id: string;
   content: string;
-  chatId: string;
+  chatId: ChatType;
   sender: string;
 };
 function SingleChat() {
   const chat = useAuthChat();
   const socket = useSocket();
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
 
   useEffect(() => {
-    socket.on("connected", () => setSocketConnected(true));
     fetchMessages();
+    socket.on("connection", () => setSocketConnected(true));
+    socket.on("disconnect", () => setSocketConnected(false));
   }, [chat?.selectedChat]);
 
   useEffect(() => {
+    if (!socket || !socket.connected) {
+      console.error("Socket Error");
+      return;
+    }
     socket.on("receive-message", (message: Message) => {
+      if (!messages) {
+        return;
+      }
+      if (chat?.selectedChat?._id != message.chatId._id) {
+      }
       setMessages([...messages, message]);
     });
-  }, [socket]);
+    return () => {
+      socket.off("receive-message");
+    };
+  }, [socket, messages]);
+
+  useEffect(() => {
+    socket.on("typing", () => setTyping(true));
+    socket.on("stopTyping", () => setTyping(false));
+    return () => {
+      socket.off("typing");
+      socket.off("stopTyping");
+    };
+  }, [socket, typing]);
 
   const fetchMessages = async () => {
     // console.log(socket);
@@ -45,7 +65,7 @@ function SingleChat() {
     try {
       const res = await axiosGetAllMessages(chat?.selectedChat._id || "");
       setMessages(res.data);
-      await socket.emit("join-room", chat?.selectedChat._id);
+      socket.emit("join-room", chat?.selectedChat._id);
     } catch (error) {}
   };
 
@@ -57,13 +77,32 @@ function SingleChat() {
           newMessage,
           chat?.selectedChat?._id || ""
         );
-        // console.log(res);
+        if (!messages) {
+          return;
+        }
+        socket.emit("stopTyping", chat?.selectedChat?._id);
         setMessages([...messages, res.data]);
-        await socket.emit("send-message", res.data);
+        socket.emit("send-message", res.data);
       } catch (error: any) {
         console.log(error);
       }
     }
+  };
+
+  const typingHandler = async (e: any) => {
+    setNewMessage(e.target.value);
+    if (!typing) {
+      socket.emit("typing", chat?.selectedChat?._id);
+    }
+    let lastTime = new Date().getTime();
+    let timerLength = 3000;
+    setTimeout(() => {
+      let timeNow = new Date().getTime();
+      let timeDiff = timeNow - lastTime;
+      if (timeDiff > timerLength) {
+        socket.emit("stopTyping", chat?.selectedChat?._id);
+      }
+    }, timerLength);
   };
 
   return (
@@ -80,7 +119,7 @@ function SingleChat() {
               display: "flex",
               justifyContent: { xs: "space-between" },
               alignItems: "center ",
-              border:"1px #f1f1f1 solid"
+              border: "1px #f1f1f1 solid",
             }}
           >
             <Button
@@ -110,30 +149,25 @@ function SingleChat() {
               flexDirection: "column",
               width: "100%",
               height: "100%",
-              // border:"none",
-              // borderRadius: "10px",
               overflowY: "scroll",
             }}
             p={0}
             m={0}
             bgcolor={"#E8E8E8"}
           >
-            {loading ? <></> : <Chat messages={messages} />}
-            <FormControl onKeyDown={sendMessage} fullWidth sx={{padding:"0 2rem", marginTop:"1rem"}}>
-              {/* <TextField 
-                fullWidth
-                // size="large"
-                sx={{height:'40px', border:"none !important"}}
-                placeholder="Enter a message"
-                onChange={(e) => setNewMessage(e.target.value)}
-              /> */}
+            {loading ? <></> : <Chat messages={messages || []} />}
+            <FormControl
+              onKeyDown={sendMessage}
+              fullWidth
+              sx={{ padding: "0 2rem", marginTop: "1rem" }}
+            >
+              {typing ? <h6>Typing</h6> : <></>}
               <input
+                value={newMessage}
                 placeholder="Enter a message"
-                
                 className="w-full h-12 pl-8 pr-8 outline-none rounded-xl"
-                onChange={(e) => setNewMessage(e.target.value)}
-              >
-              </input>
+                onChange={typingHandler}
+              ></input>
             </FormControl>
           </Box>
         </>
