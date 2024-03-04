@@ -154,38 +154,39 @@ function SideDrawer() {
         alignItems="center"
         bgcolor="white"
         width="100%"
-        padding="5px 10px"
+        padding="5px 1rem"
+        height="60px"
+        sx={{background:"#f8f8f8"}}
       >
         <Tooltip title="Search Users to chat" arrow placement="bottom-end">
-          <Button variant="contained" onClick={() => toggleDrawer(!openDrawer)}>
+          <div style={{border:'1px #f1f1f1 solid', borderRadius:'1rem', background:"#4E4CC4",color:"white", height:'100%', display:"flex", alignItems:"center", cursor:"pointer", padding:"0 1rem"}} onClick={() => toggleDrawer(!openDrawer)}>
             <i className="fas fa-search"></i>
-            <Typography display={{ xs: "none", md: "block" }} paddingLeft={2}>
+            <Typography display={{ xs: "none", md: "block" }} color="white" paddingLeft={2}>
               Search User
             </Typography>
-          </Button>
+          </div>
         </Tooltip>
         <Typography fontSize="2xl" fontFamily="Work sans">
           Xost
         </Typography>
-        <div>
-          <Button>
+        <div style={{display:"flex", alignItems:"center", gap:"1rem"}}>
             <NotificationsIcon fontSize={"medium"} />
-          </Button>
-          <Button
+          <div
             id="profile"
-            variant="contained"
+            style={{cursor:"pointer"}}
+            // variant="contained"
             onClick={handleMenuClick}
-            endIcon={
-              <KeyboardArrowDownIcon
-                fontSize={"medium"}
-                aria-controls={open ? "true" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? "true" : undefined}
-              />
-            }
+            // endIcon={
+            //   <KeyboardArrowDownIcon
+            //     fontSize={"medium"}
+            //     aria-controls={open ? "true" : undefined}
+            //     aria-haspopup="true"
+            //     aria-expanded={open ? "true" : undefined}
+            //   />
+            // }
           >
-            <Avatar alt={auth?.user?.name} src={auth?.user?.pic} />
-          </Button>
+            <Avatar alt={auth?.user?.name} src={auth?.user?.pic} sx={{cursor:"pointer"}} />
+          </div>
           <Menu open={false}></Menu>
           <Menu
             open={open}

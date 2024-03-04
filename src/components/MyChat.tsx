@@ -1,5 +1,5 @@
 import { useAuthChat } from "../hooks/contextHooks";
-import { Box, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Stack, Typography } from "@mui/material";
 import UsersLoader from "./Loader/UsersLoader";
 import { User } from "../context/AuthContext";
 import { getLocalStorage } from "../hooks/storageHooks";
@@ -22,15 +22,14 @@ function MyChat() {
       display={{ xs: chat?.selectedChat ? "none" : "flex", md: "flex" }}
       flexDirection="column"
       alignItems="center"
-      p={3}
-      bgcolor="white"
+      p={0}
+      bgcolor="#f8f8f8"
       width={{ xs: "100%", md: "31%" }}
-      borderRadius="10px"
+      borderRadius="0px"
       border={1}
     >
       <Box
-        pb={3}
-        px={3}
+        p={2}
         fontSize={{ xs: "28px", md: "30px" }}
         fontFamily="Work sans"
         display="flex"
@@ -44,7 +43,8 @@ function MyChat() {
       <Box
         display="flex"
         flexDirection="column"
-        p={3}
+        p={0}
+        
         bgcolor="#F8F8F8"
         width="100%"
         height="100%"
@@ -53,17 +53,24 @@ function MyChat() {
       >
         {chat?.chats ? (
           <Stack>
-            {chat.chats.map((ch) => (
+            {chat?.chats?.map((ch) => (
               <Box
+                component={Stack}
+                flexDirection="row"
+justifyContent="start"
+                alignItems="center"
+                gap={2}
                 onClick={() => chat?.setSelectedChat(ch)}
                 key={ch._id}
-                sx={{ cursor: "pointer", borderRadius: "5px" }}
+                sx={{ cursor: "pointer", borderRadius: "5px",  }}
                 px={3}
                 py={2}
                 m={"3px"}
                 bgcolor={chat?.selectedChat === ch ? "#38B2AC" : "#E8E8E8"}
                 color={chat?.selectedChat === ch ? "white" : "black"}
               >
+            <Avatar  />
+
                 <Typography>
                   {!ch.isGroupChat ? getSender(ch.users) : ch.chatName}
                 </Typography>

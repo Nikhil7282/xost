@@ -9,7 +9,7 @@ function ChatBox() {
       display={{ xs: chat?.selectedChat ? "flex" : "none", md: "flex" }}
       alignItems="center"
       flexDirection="column"
-      padding={3}
+      padding={0}
       bgcolor="white"
       width={{ base: "100%", md: "68%" }}
       borderRadius="lg"

@@ -71,15 +71,16 @@ function SingleChat() {
       {chat?.selectedChat ? (
         <>
           <Typography
-            fontSize={{ xs: "28px", md: "30px" }}
-            pb={3}
-            px={2}
+            fontSize={{ xs: "28px", md: "24px" }}
+            pb={0}
+            p={1}
             width={"100%"}
             fontFamily={"work sans"}
             sx={{
               display: "flex",
               justifyContent: { xs: "space-between" },
-              alignItems: "center",
+              alignItems: "center ",
+              border:"1px #f1f1f1 solid"
             }}
           >
             <Button
@@ -109,19 +110,30 @@ function SingleChat() {
               flexDirection: "column",
               width: "100%",
               height: "100%",
-              borderRadius: "10px",
+              // border:"none",
+              // borderRadius: "10px",
               overflowY: "scroll",
             }}
-            p={3}
+            p={0}
+            m={0}
             bgcolor={"#E8E8E8"}
           >
             {loading ? <></> : <Chat messages={messages} />}
-            <FormControl onKeyDown={sendMessage}>
-              <TextField
-                label="Enter a Message"
-                size="small"
+            <FormControl onKeyDown={sendMessage} fullWidth sx={{padding:"0 2rem", marginTop:"1rem"}}>
+              {/* <TextField 
+                fullWidth
+                // size="large"
+                sx={{height:'40px', border:"none !important"}}
+                placeholder="Enter a message"
                 onChange={(e) => setNewMessage(e.target.value)}
-              />
+              /> */}
+              <input
+                placeholder="Enter a message"
+                
+                className="w-full h-12 pl-8 pr-8 outline-none rounded-xl"
+                onChange={(e) => setNewMessage(e.target.value)}
+              >
+              </input>
             </FormControl>
           </Box>
         </>
