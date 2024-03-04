@@ -12,7 +12,7 @@ import {
   ListItem,
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+// import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useState } from "react";
 import { useAuthChat, useAuthUser } from "../hooks/contextHooks";
 import ProfileModel from "./Models/ProfileModel";
@@ -156,12 +156,29 @@ function SideDrawer() {
         width="100%"
         padding="5px 1rem"
         height="60px"
-        sx={{background:"#f8f8f8"}}
+        sx={{ background: "#f8f8f8" }}
       >
         <Tooltip title="Search Users to chat" arrow placement="bottom-end">
-          <div style={{border:'1px #f1f1f1 solid', borderRadius:'1rem', background:"#4E4CC4",color:"white", height:'100%', display:"flex", alignItems:"center", cursor:"pointer", padding:"0 1rem"}} onClick={() => toggleDrawer(!openDrawer)}>
+          <div
+            style={{
+              border: "1px #f1f1f1 solid",
+              borderRadius: "1rem",
+              background: "#4E4CC4",
+              color: "white",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              cursor: "pointer",
+              padding: "0 1rem",
+            }}
+            onClick={() => toggleDrawer(!openDrawer)}
+          >
             <i className="fas fa-search"></i>
-            <Typography display={{ xs: "none", md: "block" }} color="white" paddingLeft={2}>
+            <Typography
+              display={{ xs: "none", md: "block" }}
+              color="white"
+              paddingLeft={2}
+            >
               Search User
             </Typography>
           </div>
@@ -169,13 +186,15 @@ function SideDrawer() {
         <Typography fontSize="2xl" fontFamily="Work sans">
           Xost
         </Typography>
-        <div style={{display:"flex", alignItems:"center", gap:"1rem"}}>
-            <NotificationsIcon fontSize={"medium"} />
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <NotificationsIcon fontSize={"medium"} color="primary" />
           <div
             id="profile"
-            style={{cursor:"pointer"}}
-            // variant="contained"
-            onClick={handleMenuClick}
+            style={{ cursor: "pointer" }}
+            onClick={
+              (e) => setAnchorEl(e.currentTarget)
+              // handleMenuClick
+            }
             // endIcon={
             //   <KeyboardArrowDownIcon
             //     fontSize={"medium"}
@@ -185,7 +204,11 @@ function SideDrawer() {
             //   />
             // }
           >
-            <Avatar alt={auth?.user?.name} src={auth?.user?.pic} sx={{cursor:"pointer"}} />
+            <Avatar
+              alt={auth?.user?.name}
+              src={auth?.user?.pic}
+              sx={{ cursor: "pointer" }}
+            />
           </div>
           <Menu open={false}></Menu>
           <Menu
@@ -243,29 +266,6 @@ function SideDrawer() {
             )}
           </List>
         </Box>
-        {/* <DrawerBody>
-          <Box display="flex" paddingBottom={2}>
-            <Input
-              placeholder="Search by name or email"
-              marginRight={2}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <Button onClick={handleSearch}>Go</Button>
-          </Box>
-          {loading ? (
-            <ChatLoading />
-          ) : (
-            searchResult?.map((user) => (
-              <UserListItem
-                key={user._id}
-                user={user}
-                handleFunction={() => accessChat(user._id)}
-              />
-            ))
-          )}
-          {loadingChat && <Spinner ml="auto" display="flex" />}
-        </DrawerBody> */}
       </Drawer>
     </>
   );
