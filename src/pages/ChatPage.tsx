@@ -14,7 +14,11 @@ function ChatPage() {
   return (
     <div className="w-full">
       {auth?.user && <SideDrawer />}
-      <div className="flex justify-between w-full h-91.5vh p-10">
+      <div style={{
+        height: "calc(100vh - 65px)",
+        display: "flex",
+        
+      }}>
         {
           auth?.user && <MyChat />
           // <MyChats fetchAgain={fetchAgain} />
