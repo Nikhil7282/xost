@@ -12,7 +12,6 @@ import {
   ListItem,
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-// import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useState } from "react";
 import { useAuthChat, useAuthUser } from "../hooks/contextHooks";
 import ProfileModel from "./Models/ProfileModel";
@@ -22,6 +21,7 @@ import UsersLoader from "./Loader/UsersLoader";
 import UserListItem from "./UserListItem";
 import { axiosAccessChats, axiosSearchUsers } from "../axios/axiosClient";
 import { User } from "../context/AuthContext";
+import NotificationModel from "./Models/NotificationModel";
 
 export type SearchUser = {
   _id: string;
@@ -96,9 +96,6 @@ function SideDrawer() {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
 
-  const handleMenuClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(e.currentTarget);
-  };
   const handleMenuClose = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(null);
   };
@@ -187,22 +184,13 @@ function SideDrawer() {
           Xost
         </Typography>
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          <NotificationsIcon fontSize={"medium"} color="primary" />
+          <div>
+            <NotificationModel />
+          </div>
           <div
             id="profile"
             style={{ cursor: "pointer" }}
-            onClick={
-              (e) => setAnchorEl(e.currentTarget)
-              // handleMenuClick
-            }
-            // endIcon={
-            //   <KeyboardArrowDownIcon
-            //     fontSize={"medium"}
-            //     aria-controls={open ? "true" : undefined}
-            //     aria-haspopup="true"
-            //     aria-expanded={open ? "true" : undefined}
-            //   />
-            // }
+            onClick={(e) => setAnchorEl(e.currentTarget)}
           >
             <Avatar
               alt={auth?.user?.name}
