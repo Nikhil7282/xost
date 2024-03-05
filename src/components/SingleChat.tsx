@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, TextField, Typography } from "@mui/material";
+import { Box, Button, FormControl, Typography } from "@mui/material";
 import { useAuthChat, useAuthUser, useSocket } from "../hooks/contextHooks";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useGetSender, useGetSenderObject } from "../hooks/senderHooks";
@@ -36,18 +36,24 @@ function SingleChat() {
       return;
     }
     socket.on("receive-message", (message: Message) => {
+      // console.log("received message event");
       if (!messages) {
         return;
       }
       if (chat?.selectedChat?._id != message.chatId._id) {
+        // console.log("Message");
+        if (!chat?.notification.includes(message as never)) {
+          chat?.setNotification([message, ...chat.notification]);
+        }
       }
       setMessages([...messages, message]);
     });
     return () => {
       socket.off("receive-message");
     };
-  }, [socket, messages]);
+  }, [socket, messages, chat?.selectedChat]);
 
+  // console.log("Notification:", chat?.notification);
   useEffect(() => {
     socket.on("typing", () => setTyping(true));
     socket.on("stopTyping", () => setTyping(false));
@@ -124,7 +130,7 @@ function SingleChat() {
           >
             <Button
               sx={{ display: { xs: "flex", md: "none" } }}
-              onClick={() => chat.setSelectedChat(null)}
+              onClick={() => chat?.setSelectedChat(null)}
             >
               <ArrowBackIcon />
             </Button>

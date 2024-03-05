@@ -1,14 +1,17 @@
 import {
-  Avatar,
   Backdrop,
   Box,
   Button,
-  Fade,
   Modal,
   Typography,
+  Fade,
+  Stack,
+  styled,
+  Paper,
 } from "@mui/material";
 import { useState } from "react";
-import { User } from "../../context/AuthContext";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import { useAuthChat } from "../../hooks/contextHooks";
 
 const style = {
   position: "absolute",
@@ -23,12 +26,10 @@ const style = {
   p: 4,
 };
 
-type Props = {
-  children?: any;
-  user: User | null | undefined;
-};
+function NotificationModel() {
+  const chat = useAuthChat();
+  console.log(chat?.notification);
 
-function ProfileModel({ children, user }: Props) {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -56,23 +57,25 @@ function ProfileModel({ children, user }: Props) {
                   justifyContent: "center",
                 }}
               >
-                <Typography
-                  id="transition-modal-title"
-                  variant="h4"
-                  component="h2"
-                >
-                  {user?.name}
+                <Typography>
+                  {chat?.notification.length == 0 ? (
+                    <Typography>No Notifications Yet</Typography>
+                  ) : (
+                    <Box>
+                      {chat?.notification?.map((not) => (
+                        <Stack>
+                          <Box>
+                            <Typography>
+                              {not.chatId.chatName + "123"}
+                            </Typography>
+                            <Typography>{not.content}</Typography>
+                          </Box>
+                        </Stack>
+                      ))}
+                    </Box>
+                  )}
                 </Typography>
-                <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-                  <Avatar
-                    src={user?.pic}
-                    alt={user?.name}
-                    sx={{ width: "150px", height: "150px" }}
-                  />
-                </Typography>
-                <Typography mt={3} mb={3}>
-                  {user?.email}
-                </Typography>
+
                 <Button variant="contained" onClick={() => setOpen(false)}>
                   Close
                 </Button>
@@ -81,16 +84,14 @@ function ProfileModel({ children, user }: Props) {
           </Fade>
         </Modal>
       ) : (
-        <Button onClick={() => setOpen(true)}>
-          {children ? (
-            <span>{children}</span>
-          ) : (
-            <Avatar src={user?.pic} alt={user?.name} />
-          )}
-        </Button>
+        <NotificationsIcon
+          fontSize={"medium"}
+          color="primary"
+          onClick={() => setOpen(true)}
+        />
       )}
     </>
   );
 }
 
-export default ProfileModel;
+export default NotificationModel;

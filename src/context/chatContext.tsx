@@ -3,6 +3,7 @@ import { User } from "./AuthContext";
 import { axiosFetchChats } from "../axios/axiosClient";
 import { getLocalStorage } from "../hooks/storageHooks";
 import { useAuthUser } from "../hooks/contextHooks";
+import { Message } from "../components/SingleChat";
 
 type ChatAuth = {
   chats: ChatType[] | null;
@@ -11,6 +12,8 @@ type ChatAuth = {
   setSelectedChat: React.Dispatch<React.SetStateAction<ChatType | null>>;
   fetchChatAgain: boolean;
   setFetchChatAgain: React.Dispatch<React.SetStateAction<boolean>>;
+  notification: Message[] | [];
+  setNotification: React.Dispatch<React.SetStateAction<Message[] | []>>;
 };
 
 type GroupAdmin = {
@@ -41,6 +44,7 @@ const ChatsProvider = ({ children }: { children: ReactNode }) => {
   const [chats, setChats] = useState<ChatType[] | null>(null);
   const [selectedChat, setSelectedChat] = useState<ChatType | null>(null);
   const [fetchChatAgain, setFetchChatAgain] = useState(false);
+  const [notification, setNotification] = useState<Message[] | []>([]);
   const auth = useAuthUser();
   // console.log("context:", auth);
 
@@ -63,6 +67,8 @@ const ChatsProvider = ({ children }: { children: ReactNode }) => {
     setSelectedChat,
     fetchChatAgain,
     setFetchChatAgain,
+    notification,
+    setNotification,
   };
   return <chatContext.Provider value={value}>{children}</chatContext.Provider>;
 };
