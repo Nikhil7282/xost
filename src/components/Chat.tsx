@@ -9,6 +9,9 @@ type Prop = {
 
 function Chat({ messages }: Prop) {
   const auth = useAuthUser();
+  console.log(messages);
+  // console.log(auth?.user);
+
   return (
     <Box
       className="chattingBox"
@@ -26,22 +29,25 @@ function Chat({ messages }: Prop) {
         {messages &&
           messages.map((m: Message) => (
             <div key={m._id} className="messageItem">
+              {/* {console.log(m)} */}
               <span
                 style={{
                   backgroundColor: `${
                     //@ts-ignore
-                    m.sender === auth?.user?.id ? "#B9F5D0" : "#beb9b9"
+                    m.sender._id === auth?.user?.id ? "#B9F5D0" : "#beb9b9"
                   }`,
                   float: `${
                     //@ts-ignore
-                    m.sender === auth?.user?.id ? "right" : "left"
+                    m.sender._id === auth?.user?.id ? "right" : "left"
                   }`,
                   borderRadius: "10px",
                   padding: "5px 10px",
                   maxWidth: "70%",
 
                   //@ts-ignore
-                  marginLeft: `${m.sender === auth?.user?.id ? "303px" : "0"}`,
+                  marginLeft: `${
+                    m.sender._id === auth?.user?.id ? "303px" : "0"
+                  }`,
                   // margin:"1rem"
                 }}
               >

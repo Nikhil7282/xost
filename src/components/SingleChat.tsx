@@ -8,12 +8,13 @@ import { useEffect, useState } from "react";
 import { axiosGetAllMessages, axiosSendMessage } from "../axios/axiosClient";
 import Chat from "./Chat";
 import { ChatType } from "../context/ChatContext";
+import { User } from "../context/AuthContext";
 
 export type Message = {
   _id: string;
   content: string;
   chatId: ChatType;
-  sender: string;
+  sender: User;
 };
 function SingleChat() {
   const chat = useAuthChat();
@@ -70,6 +71,8 @@ function SingleChat() {
     }
     try {
       const res = await axiosGetAllMessages(chat?.selectedChat._id || "");
+      console.log(res.data);
+
       setMessages(res.data);
       socket.emit("join-room", chat?.selectedChat._id);
     } catch (error) {}
@@ -96,6 +99,7 @@ function SingleChat() {
   };
 
   const typingHandler = async (e: any) => {
+    // console.log("SinglePage", messages);
     setNewMessage(e.target.value);
     if (!typing) {
       socket.emit("typing", chat?.selectedChat?._id);
