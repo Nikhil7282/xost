@@ -30,9 +30,9 @@ export default function LoginPage() {
     try {
       const res = await axiosClient.post("/user/login", userDetails);
       toast.success(res.data.message);
+      console.log(res);
       navigate("/chats");
       auth?.login(res.data.user, res.data.token);
-      // console.log(res);
     } catch (error: any) {
       if (error.response.status === 401) {
         toast.error(error.response.data.message);

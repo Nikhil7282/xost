@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, Typography } from "@mui/material";
+import { Avatar, Box, Button, FormControl, Typography } from "@mui/material";
 import { useAuthChat, useAuthUser, useSocket } from "../hooks/contextHooks";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useGetSender, useGetSenderObject } from "../hooks/senderHooks";
@@ -37,12 +37,10 @@ function SingleChat() {
       return;
     }
     socket.on("receive-message", (message: Message) => {
-      // console.log("received message event");
       if (!messages) {
         return;
       }
       if (chat?.selectedChat?._id != message.chatId._id) {
-        // console.log("Message");
         if (!chat?.notification.includes(message as never)) {
           chat?.setNotification([message, ...chat.notification]);
         }
@@ -54,7 +52,6 @@ function SingleChat() {
     };
   }, [socket, messages, chat?.selectedChat]);
 
-  // console.log("Notification:", chat?.notification);
   useEffect(() => {
     socket.on("typing", () => setTyping(true));
     socket.on("stopTyping", () => setTyping(false));
@@ -65,17 +62,19 @@ function SingleChat() {
   }, [socket, typing]);
 
   const fetchMessages = async () => {
-    // console.log(socket);
     if (!chat?.selectedChat) {
       return;
     }
     try {
+      setLoading(true);
       const res = await axiosGetAllMessages(chat?.selectedChat._id || "");
-      console.log(res.data);
 
       setMessages(res.data);
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
       socket.emit("join-room", chat?.selectedChat._id);
-    } catch (error) {}
+    }
   };
 
   const sendMessage = async (e: any) => {
@@ -99,7 +98,6 @@ function SingleChat() {
   };
 
   const typingHandler = async (e: any) => {
-    // console.log("SinglePage", messages);
     setNewMessage(e.target.value);
     if (!typing) {
       socket.emit("typing", chat?.selectedChat?._id);

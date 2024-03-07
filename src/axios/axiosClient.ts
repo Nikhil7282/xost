@@ -78,4 +78,5 @@ export const axiosGetAllMessages = async (chatId: string) => {
   const res = await axiosClient.get(`/messages/${chatId}`);
   return res.data;
 };
+
 export default axiosClient;
