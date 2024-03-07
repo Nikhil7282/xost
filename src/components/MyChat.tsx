@@ -1,21 +1,11 @@
 import { useAuthChat } from "../hooks/contextHooks";
 import { Avatar, Box, Stack, Typography } from "@mui/material";
 import UsersLoader from "./Loader/UsersLoader";
-import { User } from "../context/AuthContext";
-import { getLocalStorage } from "../hooks/storageHooks";
-import toast from "react-hot-toast";
 import AddGroupModel from "./Models/AddGroupModel";
+import { useGetSender } from "../hooks/senderHooks";
 
 function MyChat() {
   const chat = useAuthChat();
-
-  const getSender = (users: User[]): any => {
-    let loggedUser = getLocalStorage("userInfo");
-    if (!loggedUser) {
-      toast.error("User not Logged In");
-    }
-    return users.find((user) => user._id !== loggedUser.id)?.name;
-  };
 
   return (
     <Box
@@ -44,7 +34,6 @@ function MyChat() {
         display="flex"
         flexDirection="column"
         p={0}
-        
         bgcolor="#F8F8F8"
         width="100%"
         height="100%"
@@ -57,22 +46,21 @@ function MyChat() {
               <Box
                 component={Stack}
                 flexDirection="row"
-justifyContent="start"
+                justifyContent="start"
                 alignItems="center"
                 gap={2}
                 onClick={() => chat?.setSelectedChat(ch)}
                 key={ch._id}
-                sx={{ cursor: "pointer", borderRadius: "5px",  }}
+                sx={{ cursor: "pointer", borderRadius: "5px" }}
                 px={3}
                 py={2}
                 m={"3px"}
                 bgcolor={chat?.selectedChat === ch ? "#38B2AC" : "#E8E8E8"}
                 color={chat?.selectedChat === ch ? "white" : "black"}
               >
-            <Avatar  />
-
+                <Avatar />
                 <Typography>
-                  {!ch.isGroupChat ? getSender(ch.users) : ch.chatName}
+                  {!ch.isGroupChat ? useGetSender(ch.users) : ch.chatName}
                 </Typography>
               </Box>
             ))}

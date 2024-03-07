@@ -11,8 +11,6 @@ import {
   List,
   ListItem,
 } from "@mui/material";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import { useState } from "react";
 import { useAuthChat, useAuthUser } from "../hooks/contextHooks";
 import ProfileModel from "./Models/ProfileModel";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +19,9 @@ import UsersLoader from "./Loader/UsersLoader";
 import UserListItem from "./UserListItem";
 import { axiosAccessChats, axiosSearchUsers } from "../axios/axiosClient";
 import { User } from "../context/AuthContext";
+import SearchIcon from "@mui/icons-material/Search";
 import NotificationModel from "./Models/NotificationModel";
+import { useState } from "react";
 
 export type SearchUser = {
   _id: string;
@@ -170,7 +170,7 @@ function SideDrawer() {
             }}
             onClick={() => toggleDrawer(!openDrawer)}
           >
-            <i className="fas fa-search"></i>
+            <SearchIcon />
             <Typography
               display={{ xs: "none", md: "block" }}
               color="white"
@@ -184,9 +184,11 @@ function SideDrawer() {
           Xost
         </Typography>
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          <div>
-            <NotificationModel />
-          </div>
+          <Tooltip title="Notifications" arrow placement="bottom-end">
+            <div>
+              <NotificationModel />
+            </div>
+          </Tooltip>
           <div
             id="profile"
             style={{ cursor: "pointer" }}

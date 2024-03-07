@@ -18,7 +18,6 @@ function Chat({ messages }: Prop) {
         alignItems: "flex-end",
         justifyContent: "center",
         height: "calc(100% - 70px)",
-        // border: "1px solid black",
         padding: "0 2rem",
       }}
     >
@@ -30,18 +29,20 @@ function Chat({ messages }: Prop) {
                 style={{
                   backgroundColor: `${
                     //@ts-ignore
-                    m.sender === auth?.user?.id ? "#B9F5D0" : "#beb9b9"
+                    m.sender._id === auth?.user?._id ? "#B9F5D0" : "#beb9b9"
                   }`,
                   float: `${
                     //@ts-ignore
-                    m.sender === auth?.user?.id ? "right" : "left"
+                    m.sender._id === auth?.user?._id ? "right" : "left"
                   }`,
                   borderRadius: "10px",
                   padding: "5px 10px",
                   maxWidth: "70%",
 
                   //@ts-ignore
-                  marginLeft: `${m.sender === auth?.user?.id ? "303px" : "0"}`,
+                  marginLeft: `${
+                    m.sender._id === auth?.user?._id ? "303px" : "0"
+                  }`,
                   // margin:"1rem"
                 }}
               >

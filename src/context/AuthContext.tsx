@@ -14,6 +14,7 @@ export type UserAuth = {
 };
 
 export type User = {
+  id?: string;
   _id?: string;
   name: string;
   email: string;

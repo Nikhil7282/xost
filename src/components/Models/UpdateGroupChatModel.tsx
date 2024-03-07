@@ -9,7 +9,7 @@ import { useAuthChat, useAuthUser } from "../../hooks/contextHooks";
 import { useEffect, useState } from "react";
 import UserBadge from "../UserBadge";
 import { User } from "../../context/AuthContext";
-import { FormControl, TextField } from "@mui/material";
+import { CircularProgress, TextField } from "@mui/material";
 import toast from "react-hot-toast";
 import {
   axiosAddToGroup,
@@ -44,7 +44,8 @@ export default function UpdateGroupChatModel() {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
-  const [renameloading, setRenameLoading] = useState(false);
+  const [renameLoading, setRenameLoading] = useState(false);
+  console.log(chat?.selectedChat);
 
   useEffect(() => {
     const getUsers = setTimeout(async () => {
@@ -58,7 +59,13 @@ export default function UpdateGroupChatModel() {
     return () => clearTimeout(getUsers);
   }, [search]);
 
-  const handleRemoveUser = async (user: User) => {
+  const handleRemoveUser = async (user: User | null | undefined) => {
+    if (user === null || user === undefined) {
+      toast("Invalid User", {
+        icon: "⚠️",
+      });
+      return;
+    }
     if (!chat?.selectedChat?.users.find((u) => u._id === user._id)) {
       toast("User Does Not Exists", {
         icon: "⚠️",
@@ -72,6 +79,11 @@ export default function UpdateGroupChatModel() {
       );
       setLoading(false);
       toast.success(res.message);
+      if (user._id === auth?.user?._id) {
+        chat?.setChats(
+          chat?.chats?.filter((ch) => ch._id !== chat?.selectedChat?._id) || []
+        );
+      }
     } catch (error: any) {
       setLoading(false);
       console.log(error);
@@ -124,7 +136,6 @@ export default function UpdateGroupChatModel() {
       toast.error(error.response.data.message);
     }
   };
-  // const handleUserSearch = () => {};
   return (
     <div>
       <Button onClick={() => setOpen(true)}>
@@ -179,11 +190,17 @@ export default function UpdateGroupChatModel() {
                 sx={{ marginLeft: "3px", width: "30%" }}
                 onClick={handleGroupRename}
               >
-                Rename
+                {renameLoading ? (
+                  <>
+                    <CircularProgress color="inherit" />
+                  </>
+                ) : (
+                  "Rename"
+                )}
               </Button>
             </Box>
             {chat?.selectedChat?.groupAdmin._id ===
-            getLocalStorage("userInfo").id ? (
+            getLocalStorage("userInfo")._id ? (
               <>
                 <Box sx={{ margin: "15px" }}>
                   <TextField
@@ -207,7 +224,13 @@ export default function UpdateGroupChatModel() {
             )}
 
             <Box>
-              <Button>Leave</Button>
+              {auth?.user?._id == chat?.selectedChat?.groupAdmin._id ? (
+                <></>
+              ) : (
+                <Button onClick={() => handleRemoveUser(auth?.user)}>
+                  Leave
+                </Button>
+              )}
               <Button variant="contained" onClick={() => setOpen(false)}>
                 Close
               </Button>

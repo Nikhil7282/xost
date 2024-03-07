@@ -6,7 +6,7 @@ export const useGetSender = (users: User[]) => {
   if (!loggedUser) {
     throw new Error("User not logged");
   }
-  return users.find((user) => user._id !== loggedUser.id)?.name;
+  return users.find((user) => user._id !== loggedUser._id)?.name;
 };
 
 export const useGetSenderObject = (users: User[]) => {
@@ -14,5 +14,5 @@ export const useGetSenderObject = (users: User[]) => {
   if (!loggedUser) {
     throw new Error("User not logged");
   }
-  return users.find((user) => user._id !== loggedUser.id);
+  return users.find((user) => user._id !== loggedUser._id);
 };

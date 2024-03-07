@@ -6,8 +6,6 @@ import {
   Typography,
   Fade,
   Stack,
-  styled,
-  Paper,
 } from "@mui/material";
 import { useState } from "react";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -28,8 +26,12 @@ const style = {
 
 function NotificationModel() {
   const chat = useAuthChat();
-  console.log(chat?.notification);
 
+  const redirectChat = (chatId: any, notId: string) => {
+    setOpen(false);
+    chat?.setNotification(chat.notification.filter((not) => not._id !== notId));
+    chat?.setSelectedChat(chatId);
+  };
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -61,18 +63,22 @@ function NotificationModel() {
                   {chat?.notification.length == 0 ? (
                     <Typography>No Notifications Yet</Typography>
                   ) : (
-                    <Box>
+                    <Stack>
                       {chat?.notification?.map((not) => (
-                        <Stack>
-                          <Box>
-                            <Typography>
-                              {not.chatId.chatName + "123"}
-                            </Typography>
-                            <Typography>{not.content}</Typography>
-                          </Box>
-                        </Stack>
+                        <Box
+                          sx={{ border: "1px solid black", cursor: "pointer" }}
+                          key={not._id}
+                          onClick={() => redirectChat(not.chatId, not._id)}
+                        >
+                          <Typography>
+                            {not.chatId.isGroupChat
+                              ? not.chatId.chatName
+                              : not.sender.name}
+                          </Typography>
+                          <Typography>{not.content}</Typography>
+                        </Box>
                       ))}
-                    </Box>
+                    </Stack>
                   )}
                 </Typography>
 
