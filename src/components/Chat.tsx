@@ -19,6 +19,7 @@ function Chat({ messages }: Prop) {
         justifyContent: "center",
         height: "calc(100% - 70px)",
         padding: "0 2rem",
+        msOverflowStyle: "scroll",
       }}
     >
       <ScrollableFeed className="scrollable">
@@ -30,6 +31,10 @@ function Chat({ messages }: Prop) {
                   backgroundColor: `${
                     //@ts-ignore
                     m.sender._id === auth?.user?._id ? "#B9F5D0" : "#beb9b9"
+                  }`,
+                  color: `${
+                    //@ts-ignore
+                    m.sender._id === auth?.user?._id ? "#000000" : "#ffffff"
                   }`,
                   float: `${
                     //@ts-ignore
