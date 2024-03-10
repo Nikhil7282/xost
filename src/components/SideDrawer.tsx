@@ -10,6 +10,7 @@ import {
   TextField,
   List,
   ListItem,
+  Badge,
 } from "@mui/material";
 import { useAuthChat, useAuthUser } from "../hooks/contextHooks";
 import ProfileModel from "./Models/ProfileModel";
@@ -132,11 +133,13 @@ function SideDrawer() {
   const accessChat = async (user: User) => {
     try {
       const res = await axiosAccessChats(user._id || "");
-      console.log(res);
-      let isExists = chat?.chats?.find((ch) => ch._id === res.chat[0]._id);
+      if (chat?.chats === null) {
+        chat?.setChats([]);
+      }
+      let isExists = chat?.chats?.find((ch) => ch._id === res.chat._id);
       if (!isExists) {
-        chat?.setChats(res.chat[0]);
-        console.log(chat);
+        chat?.setChats([...(chat?.chats || []), res.chat]);
+        setOpenDrawer(false);
       }
     } catch (error) {
       console.log(error);
@@ -186,7 +189,9 @@ function SideDrawer() {
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           <Tooltip title="Notifications" arrow placement="bottom-end">
             <div>
-              <NotificationModel />
+              <Badge badgeContent={chat?.notification.length} color="primary">
+                <NotificationModel />
+              </Badge>
             </div>
           </Tooltip>
           <div

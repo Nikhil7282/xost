@@ -1,4 +1,11 @@
-import { Avatar, Box, Button, FormControl, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  FormControl,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useAuthChat, useAuthUser, useSocket } from "../hooks/contextHooks";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useGetSender, useGetSenderObject } from "../hooks/senderHooks";
@@ -9,7 +16,7 @@ import { axiosGetAllMessages, axiosSendMessage } from "../axios/axiosClient";
 import Chat from "./Chat";
 import { ChatType } from "../context/ChatContext";
 import { User } from "../context/AuthContext";
-
+import SendIcon from "@mui/icons-material/Send";
 export type Message = {
   _id: string;
   content: string;
@@ -53,7 +60,17 @@ function SingleChat() {
   }, [socket, messages, chat?.selectedChat]);
 
   useEffect(() => {
-    socket.on("typing", () => setTyping(true));
+    socket.on("typing", (user) => {
+      setTyping(true);
+      // console.log("TypeId:", user);
+      // console.log("Chat", chat);
+      // console.log("ChatId:", chat?.selectedChat?._id);
+      // if (user !== chat?.selectedChat?._id) {
+      //   setTyping(false);
+      // } else {
+      //   setTyping(true);
+      // }
+    });
     socket.on("stopTyping", () => setTyping(false));
     return () => {
       socket.off("typing");
@@ -66,14 +83,14 @@ function SingleChat() {
       return;
     }
     try {
+      socket.emit("join-room", chat?.selectedChat._id);
       setLoading(true);
+      console.log(chat?.selectedChat?._id);
       const res = await axiosGetAllMessages(chat?.selectedChat._id || "");
-
       setMessages(res.data);
       setLoading(false);
     } catch (error: any) {
       setLoading(false);
-      socket.emit("join-room", chat?.selectedChat._id);
     }
   };
 
@@ -90,6 +107,7 @@ function SingleChat() {
         }
         socket.emit("stopTyping", chat?.selectedChat?._id);
         setMessages([...messages, res.data]);
+        // console.log(res.data);
         socket.emit("send-message", res.data);
       } catch (error: any) {
         console.log(error);
@@ -158,6 +176,7 @@ function SingleChat() {
               width: "100%",
               height: "100%",
               overflowY: "scroll",
+              border: "1px solid red",
             }}
             p={0}
             m={0}
@@ -167,15 +186,23 @@ function SingleChat() {
             <FormControl
               onKeyDown={sendMessage}
               fullWidth
-              sx={{ padding: "0 2rem", marginTop: "1rem" }}
+              sx={{
+                padding: "0 2rem",
+                marginTop: "1rem",
+                position: "absolute",
+                bottom: "1rem",
+              }}
             >
-              {typing ? <h6>Typing</h6> : <></>}
+              {typing ? <div className="typing-loader"></div> : <></>}
               <input
                 value={newMessage}
                 placeholder="Enter a message"
-                className="w-full h-12 pl-8 pr-8 outline-none rounded-xl"
+                className="w-full h-12 pl-8 pr-8 mr-9 outline-none rounded-xl"
                 onChange={typingHandler}
               ></input>
+              <SendIcon
+                sx={{ position: "absolute", right: "2.7rem", top: "28%" }}
+              />
             </FormControl>
           </Box>
         </>

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import axiosClient from "../axios/axiosClient";
+import { useNavigate } from "react-router-dom";
 
 type UserDetails = {
   name: string;
@@ -10,6 +11,7 @@ type UserDetails = {
 };
 
 export default function SignUpPage() {
+  const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState<UserDetails>({
     name: "",
     email: "",
@@ -57,6 +59,7 @@ export default function SignUpPage() {
     e.preventDefault();
     try {
       const res = await axiosClient.post("/user/signup", userDetails);
+      navigate("/login");
       return console.log(res);
     } catch (error: any) {
       if (error.response.status === 401) {

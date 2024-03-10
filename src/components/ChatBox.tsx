@@ -11,7 +11,7 @@ function ChatBox() {
       flexDirection="column"
       padding={0}
       bgcolor="white"
-      width={{ base: "100%", md: "68%" }}
+      width={{ base: "100%", xs: "100%" }}
       borderRadius="lg"
     >
       <SingleChat />
