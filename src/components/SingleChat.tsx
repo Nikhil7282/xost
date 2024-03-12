@@ -173,6 +173,7 @@ function SingleChat() {
               display: "flex",
               alignItems: "center",
               flexDirection: "column",
+              position:"relative",
               width: "100%",
               height: "100%",
               overflowY: "scroll",
@@ -197,7 +198,7 @@ function SingleChat() {
               <input
                 value={newMessage}
                 placeholder="Enter a message"
-                className="w-full h-12 pl-8 pr-8 mr-9 outline-none rounded-xl"
+                className="w-full h-12 pl-8 pr-8 outline-none mr-9 rounded-xl"
                 onChange={typingHandler}
               ></input>
               <SendIcon
