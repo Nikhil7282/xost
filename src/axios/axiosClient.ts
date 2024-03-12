@@ -58,6 +58,11 @@ export const axiosAddToGroup = async (chatId: string, userId: string) => {
   return res.data;
 };
 
+export const axiosDeleteGroup = async (chatId: string) => {
+  const res = await axiosClient.delete(`/chats/deleteChat/${chatId}`);
+  return res.data;
+};
+
 export const axiosDeleteFromGroup = async (chatId: string, userId: string) => {
   const res = await axiosClient.put("chats/removeFromGroup", {
     userId,

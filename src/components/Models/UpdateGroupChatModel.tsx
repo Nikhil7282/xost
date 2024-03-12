@@ -14,6 +14,7 @@ import toast from "react-hot-toast";
 import {
   axiosAddToGroup,
   axiosDeleteFromGroup,
+  axiosDeleteGroup,
   axiosGroupName,
   axiosSearchUsers,
 } from "../../axios/axiosClient";
@@ -136,6 +137,21 @@ export default function UpdateGroupChatModel() {
       toast.error(error.response.data.message);
     }
   };
+  const handleDeleteGroup = async (chatId: string | undefined) => {
+    if (chatId == undefined) {
+      return;
+    }
+    try {
+      const res = await axiosDeleteGroup(chatId);
+      // console.log(res);
+      chat?.setChats(chat?.chats?.filter((ch) => ch._id !== chatId));
+      toast.success(res.message);
+      setOpen(false);
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
   return (
     <div>
       <Button onClick={() => setOpen(true)}>
@@ -222,8 +238,14 @@ export default function UpdateGroupChatModel() {
             ) : (
               <></>
             )}
-
             <Box>
+              {auth?.user?._id == chat?.selectedChat?.groupAdmin._id && (
+                <Button
+                  onClick={() => handleDeleteGroup(chat?.selectedChat?._id)}
+                >
+                  Delete
+                </Button>
+              )}
               {auth?.user?._id == chat?.selectedChat?.groupAdmin._id ? (
                 <></>
               ) : (
