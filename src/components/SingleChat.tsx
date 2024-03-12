@@ -61,22 +61,16 @@ function SingleChat() {
 
   useEffect(() => {
     socket.on("typing", (user) => {
-      setTyping(true);
-      // console.log("TypeId:", user);
-      // console.log("Chat", chat);
-      // console.log("ChatId:", chat?.selectedChat?._id);
-      // if (user !== chat?.selectedChat?._id) {
-      //   setTyping(false);
-      // } else {
-      //   setTyping(true);
-      // }
+      if (user === chat?.selectedChat?._id) {
+        setTyping(true);
+      }
     });
     socket.on("stopTyping", () => setTyping(false));
     return () => {
       socket.off("typing");
       socket.off("stopTyping");
     };
-  }, [socket, typing]);
+  }, [socket, typing, chat?.selectedChat]);
 
   const fetchMessages = async () => {
     if (!chat?.selectedChat) {
@@ -94,7 +88,7 @@ function SingleChat() {
     }
   };
 
-  const sendMessage = async (e: any) => {
+  const sendMessage = async (e?: any) => {
     if (e.key === "Enter" && newMessage) {
       try {
         setNewMessage("");
@@ -176,7 +170,6 @@ function SingleChat() {
               width: "100%",
               height: "100%",
               overflowY: "scroll",
-              border: "1px solid red",
             }}
             p={0}
             m={0}
@@ -189,7 +182,7 @@ function SingleChat() {
               sx={{
                 padding: "0 2rem",
                 marginTop: "1rem",
-                position: "absolute",
+                position: "relative",
                 bottom: "1rem",
               }}
             >
@@ -202,6 +195,7 @@ function SingleChat() {
               ></input>
               <SendIcon
                 sx={{ position: "absolute", right: "2.7rem", top: "28%" }}
+                onClick={sendMessage}
               />
             </FormControl>
           </Box>
