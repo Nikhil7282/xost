@@ -57,7 +57,7 @@ export default function AddGroupModel({ children }: Props) {
       // console.log(res);
       setSearchResults(res);
       setLoading(false);
-    }, 1000);
+    }, 500);
 
     return () => clearTimeout(getUsers);
   }, [searchUsers]);
