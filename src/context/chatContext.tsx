@@ -6,8 +6,8 @@ import { useAuthUser } from "../hooks/contextHooks";
 import { Message } from "../components/SingleChat";
 
 type ChatAuth = {
-  chats: ChatType[] | null;
-  setChats: React.Dispatch<React.SetStateAction<ChatType[] | null>>;
+  chats: ChatType[] | [];
+  setChats: React.Dispatch<React.SetStateAction<ChatType[] | []>>;
   selectedChat: ChatType | null;
   setSelectedChat: React.Dispatch<React.SetStateAction<ChatType | null>>;
   fetchChatAgain: boolean;
@@ -41,7 +41,7 @@ export type ChatType = {
 export const chatContext = createContext<ChatAuth | null>(null);
 
 const ChatsProvider = ({ children }: { children: ReactNode }) => {
-  const [chats, setChats] = useState<ChatType[] | null>(null);
+  const [chats, setChats] = useState<ChatType[] | []>([]);
   const [selectedChat, setSelectedChat] = useState<ChatType | null>(null);
   const [fetchChatAgain, setFetchChatAgain] = useState(false);
   const [notification, setNotification] = useState<Message[] | []>([]);
@@ -49,8 +49,12 @@ const ChatsProvider = ({ children }: { children: ReactNode }) => {
   // console.log("context:", auth);
 
   const fetchChats = async () => {
-    let res = await axiosFetchChats();
-    setChats(res);
+    try {
+      let res = await axiosFetchChats();
+      setChats(res);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {

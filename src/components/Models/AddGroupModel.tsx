@@ -54,7 +54,6 @@ export default function AddGroupModel({ children }: Props) {
       }
       setLoading(true);
       const res = await axiosSearchUsers(searchUsers);
-      // console.log(res);
       setSearchResults(res);
       setLoading(false);
     }, 500);
@@ -96,7 +95,12 @@ export default function AddGroupModel({ children }: Props) {
       const res = await axiosCreateGroup(groupName, selectedUsers);
       setCreateLoading(false);
       chat?.setChats([res.data, ...(chat.chats || [])]);
+      setGroupName("");
+      setSearchUsers("");
+      setSelectedUsers([]);
+      setSearchResults([]);
       toast.success(res.message);
+      setOpen(false);
     } catch (error: any) {
       setCreateLoading(false);
       console.log(error);
