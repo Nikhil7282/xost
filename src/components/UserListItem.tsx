@@ -27,9 +27,10 @@ const UserListItem = ({ user, handleFunction }: Prop) => {
         sx={{
           height: "70px",
           cursor: "pointer",
-          backgroundColor: "#E8E8E8",
+          // backgroundColor: "#E8E8E8",
+          borderBottom:"1px solid #E8E8E8",
           "&:hover": {
-            backgroundColor: "#38B2AC",
+            backgroundColor: "#E8E8E8",
             color: "white",
           },
           width: "100%",
@@ -39,7 +40,7 @@ const UserListItem = ({ user, handleFunction }: Prop) => {
           px: 3,
           py: 2,
           mb: 2,
-          borderRadius: "12px",
+          // borderRadius: "12px",
         }}
       >
         <Avatar
@@ -54,8 +55,8 @@ const UserListItem = ({ user, handleFunction }: Prop) => {
         ) : (
           <Box>
             <Typography variant="body1">{user.name}</Typography>
-            <Typography variant="caption">
-              <b>Email : </b>
+            <Typography variant="caption" sx={{color:"gray"}}>
+              {/* <b>Email : </b> */}
               {user?.email}
             </Typography>
           </Box>
