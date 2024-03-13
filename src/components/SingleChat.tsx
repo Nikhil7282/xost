@@ -183,7 +183,7 @@ function SingleChat() {
               sx={{
                 padding: "0 2rem",
                 marginTop: "1rem",
-                position: "relative",
+                position: "absolute",
                 bottom: "1rem",
               }}
             >
@@ -212,7 +212,7 @@ function SingleChat() {
         >
           <Typography fontSize="4xl" pb={3} fontFamily="Work sans">
             Click on a user to start chatting
-          </Typography>
+            </Typography>
         </Box>
       )}
     </>

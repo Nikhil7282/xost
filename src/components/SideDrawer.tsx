@@ -23,6 +23,7 @@ import { User } from "../context/AuthContext";
 import SearchIcon from "@mui/icons-material/Search";
 import NotificationModel from "./Models/NotificationModel";
 import { useState } from "react";
+import Notification from "./Notification";
 
 export type SearchUser = {
   _id: string;
@@ -192,6 +193,7 @@ function SideDrawer() {
               <Badge badgeContent={chat?.notification.length} color="primary">
                 <NotificationModel />
               </Badge>
+              <Notification/>
             </div>
           </Tooltip>
           <div
@@ -226,10 +228,9 @@ function SideDrawer() {
         open={openDrawer}
       >
         <Box>
+              {/* <Typography  sx={{background:"#f1f1f1", padding:"1rem"}}>Search Users</Typography> */}
           <List>
-            <ListItem>
-              <Typography borderBottom="1px solid">Search Users</Typography>
-            </ListItem>
+           
             <ListItem>
               <TextField
                 label="Search Users"
@@ -238,13 +239,17 @@ function SideDrawer() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <Button
-                variant="contained"
-                sx={{ marginLeft: "5px" }}
+              <button
+                // variant="contained"
+                // sx={{ marginLeft: "5px" }}
                 onClick={handleSearch}
+                className="ml-2"
+                style={{ background: "#4E4CC4" }}
+                
               >
-                Go
-              </Button>
+                {/* Go */}
+                 <SearchIcon sx={{color:"white"}}/>
+              </button>
             </ListItem>
             {loading ? (
               <ListItem>
