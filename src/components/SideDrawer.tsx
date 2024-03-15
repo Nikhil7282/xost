@@ -23,7 +23,7 @@ import { User } from "../context/AuthContext";
 import SearchIcon from "@mui/icons-material/Search";
 import NotificationModel from "./Models/NotificationModel";
 import { useState } from "react";
-import Notification from "./Notification";
+// import Notification from "./Notification";
 
 export type SearchUser = {
   _id: string;
@@ -36,55 +36,12 @@ export type SearchUser = {
   __v: number | null;
 };
 
-const arr = [
-  {
-    _id: "65d4aefa673f13bf2d65d366",
-    name: "Subash",
-    password: "$2a$10$sKb.y/Fw1q4GZQLfa.jKhu8e0d.rSftHUZknzA.EKr2vcFW1Gjb46",
-    email: "subashkrishna000@gmail.com",
-    pic: null,
-    createdAt: "2024-02-20T13:54:02.320Z",
-    updatedAt: "2024-02-20T13:54:02.320Z",
-    __v: 0,
-  },
-  {
-    _id: "65d4af26673f13bf2d65d36d",
-    name: "Raksath",
-    password: "$2a$10$sKb.y/Fw1q4GZQLfa.jKhu8e0d.rSftHUZknzA.EKr2vcFW1Gjb46",
-    email: "raksath7@gmail.com",
-    pic: "http://res.cloudinary.com/dhpnudwl9/image/upload/v1708437248/zoxmxsi6pwaaesfaorr6.jpg",
-    createdAt: "2024-02-20T13:54:46.128Z",
-    updatedAt: "2024-02-20T13:54:46.128Z",
-    __v: 0,
-  },
-  {
-    _id: "65d4af6a673f13bf2d65d372",
-    name: "Arshath",
-    password: "$2a$10$sKb.y/Fw1q4GZQLfa.jKhu8e0d.rSftHUZknzA.EKr2vcFW1Gjb46",
-    email: "arshath@gmail.com",
-    pic: "http://res.cloudinary.com/dhpnudwl9/image/upload/v1708437248/zoxmxsi6pwaaesfaorr6.jpg",
-    createdAt: "2024-02-20T13:55:54.106Z",
-    updatedAt: "2024-02-20T13:55:54.106Z",
-    __v: 0,
-  },
-  {
-    _id: "65d4af92673f13bf2d65d375",
-    name: "krishna",
-    password: "$2a$10$sKb.y/Fw1q4GZQLfa.jKhu8e0d.rSftHUZknzA.EKr2vcFW1Gjb46",
-    email: "krishna@gmail.com",
-    pic: "http://res.cloudinary.com/dhpnudwl9/image/upload/v1708437248/zoxmxsi6pwaaesfaorr6.jpg",
-    createdAt: "2024-02-20T13:56:34.527Z",
-    updatedAt: "2024-02-20T13:56:34.527Z",
-    __v: 0,
-  },
-];
-
 function SideDrawer() {
   const auth = useAuthUser();
   const chat = useAuthChat();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
-  const [searchResult, setSearchResult] = useState(arr);
+  const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState();
 
@@ -193,7 +150,7 @@ function SideDrawer() {
               <Badge badgeContent={chat?.notification.length} color="primary">
                 <NotificationModel />
               </Badge>
-              <Notification/>
+              {/* <Notification/> */}
             </div>
           </Tooltip>
           <div
@@ -228,9 +185,8 @@ function SideDrawer() {
         open={openDrawer}
       >
         <Box>
-              {/* <Typography  sx={{background:"#f1f1f1", padding:"1rem"}}>Search Users</Typography> */}
+          {/* <Typography  sx={{background:"#f1f1f1", padding:"1rem"}}>Search Users</Typography> */}
           <List>
-           
             <ListItem>
               <TextField
                 label="Search Users"
@@ -245,10 +201,9 @@ function SideDrawer() {
                 onClick={handleSearch}
                 className="ml-2"
                 style={{ background: "#4E4CC4" }}
-                
               >
                 {/* Go */}
-                 <SearchIcon sx={{color:"white"}}/>
+                <SearchIcon sx={{ color: "white" }} />
               </button>
             </ListItem>
             {loading ? (
