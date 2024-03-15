@@ -7,7 +7,7 @@ import {
   Fade,
   Stack,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { useAuthChat } from "../../hooks/contextHooks";
 
@@ -26,6 +26,15 @@ const style = {
 
 function NotificationModel() {
   const chat = useAuthChat();
+  // console.log(chat?.notification);
+
+  useEffect(() => {
+    chat?.setNotification(
+      chat.notification.filter((nft) => {
+        return nft.chatId._id != chat.selectedChat?._id;
+      })
+    );
+  }, [chat?.selectedChat]);
 
   const redirectChat = (chatId: any, notId: string) => {
     setOpen(false);

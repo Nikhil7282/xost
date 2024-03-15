@@ -1,22 +1,17 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  FormControl,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { useAuthChat, useAuthUser, useSocket } from "../hooks/contextHooks";
+import { Box, Button, FormControl, Typography } from "@mui/material";
+import { useAuthChat, useSocket } from "../hooks/contextHooks";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useGetSender, useGetSenderObject } from "../hooks/senderHooks";
 import ProfileModel from "./Models/ProfileModel";
 import UpdateGroupChatModel from "./Models/UpdateGroupChatModel";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { axiosGetAllMessages, axiosSendMessage } from "../axios/axiosClient";
 import Chat from "./Chat";
 import { ChatType } from "../context/ChatContext";
 import { User } from "../context/AuthContext";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SendIcon from "@mui/icons-material/Send";
+import toast from "react-hot-toast";
 export type Message = {
   _id: string;
   content: string;
@@ -26,6 +21,7 @@ export type Message = {
 function SingleChat() {
   const chat = useAuthChat();
   const socket = useSocket();
+  const ref = useRef<HTMLInputElement | null>(null);
   const [messages, setMessages] = useState<Message[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
@@ -39,6 +35,7 @@ function SingleChat() {
   }, [chat?.selectedChat]);
 
   useEffect(() => {
+    ref.current?.focus();
     if (!socket || !socket.connected) {
       console.error("Socket Error");
       return;
@@ -89,7 +86,7 @@ function SingleChat() {
   };
 
   const sendMessage = async (e?: any) => {
-    if (e.key === "Enter" && newMessage) {
+    if ((e.key === "Enter" || e.type === "click") && newMessage) {
       try {
         setNewMessage("");
         let res = await axiosSendMessage(
@@ -106,6 +103,32 @@ function SingleChat() {
       } catch (error: any) {
         console.log(error);
       }
+    }
+  };
+
+  const sendLocation = async () => {
+    if (navigator.geolocation) {
+      const geolocationOptions = {
+        enableHighAccuracy: true,
+        maximumAge: 10000,
+        timeout: 5000,
+      };
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          let lat = pos.coords.latitude;
+          let lon = pos.coords.longitude;
+          setNewMessage(
+            newMessage + ` https://www.google.com/maps?q=${lat},${lon}`
+          );
+        },
+        (e) => {
+          toast.error(e.message);
+          console.log(e);
+        },
+        geolocationOptions
+      );
+    } else {
+      console.log("Location Error");
     }
   };
 
@@ -167,7 +190,7 @@ function SingleChat() {
               display: "flex",
               alignItems: "center",
               flexDirection: "column",
-              position:"relative",
+              position: "relative",
               width: "100%",
               height: "100%",
               overflowY: "scroll",
@@ -177,6 +200,7 @@ function SingleChat() {
             bgcolor={"#E8E8E8"}
           >
             {loading ? <></> : <Chat messages={messages || []} />}
+
             <FormControl
               onKeyDown={sendMessage}
               fullWidth
@@ -188,14 +212,21 @@ function SingleChat() {
               }}
             >
               {typing ? <div className="typing-loader"></div> : <></>}
+              <LocationOnIcon onClick={sendLocation} />
               <input
+                ref={ref}
                 value={newMessage}
                 placeholder="Enter a message"
                 className="w-full h-12 pl-8 pr-8 outline-none mr-9 rounded-xl"
                 onChange={typingHandler}
               ></input>
               <SendIcon
-                sx={{ position: "absolute", right: "2.7rem", top: "28%" }}
+                sx={{
+                  position: "absolute",
+                  right: "2.7rem",
+                  top: "28%",
+                  curser: "pointer",
+                }}
                 onClick={sendMessage}
               />
             </FormControl>
@@ -212,7 +243,7 @@ function SingleChat() {
         >
           <Typography fontSize="4xl" pb={3} fontFamily="Work sans">
             Click on a user to start chatting
-            </Typography>
+          </Typography>
         </Box>
       )}
     </>
