@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Tooltip,
   Typography,
   Menu,
@@ -23,7 +22,6 @@ import { User } from "../context/AuthContext";
 import SearchIcon from "@mui/icons-material/Search";
 import NotificationModel from "./Models/NotificationModel";
 import { useState } from "react";
-// import Notification from "./Notification";
 
 export type SearchUser = {
   _id: string;
