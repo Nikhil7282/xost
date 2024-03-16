@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import axiosClient from "../axios/axiosClient";
 import { useNavigate } from "react-router-dom";
+import { Boxes } from "../animations/Boxes";
 
 type UserDetails = {
   name: string;
@@ -69,8 +70,10 @@ export default function SignUpPage() {
     }
   };
   return (
-    <div className="login-container h-screen w-screen bg-[url('/darkForest.png')] bg-no-repeat bg-center bg-cover flex flex-col justify-center items-center">
-      <div className="w-full p-6 m-auto bg-black bg-opacity-25 rounded-md shadow-md lg:max-w-xl">
+    <div className="absolute flex flex-col items-center justify-center w-full h-full gap-8 overflow-hidden bg-slate-900">
+      <div className="absolute inset-0 w-full h-full bg-slate-900 z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
+      <Boxes />
+      <div className="w-full p-6 m-auto z-20 bg-black bg-opacity-25 rounded-md shadow-md lg:max-w-xl">
         <h1 className="text-3xl font-semibold text-center text-gray-300 underline">
           Sign Up
         </h1>
@@ -166,7 +169,7 @@ export default function SignUpPage() {
           {" "}
           Already have an account?{" "}
           <a
-            href="#"
+            href="/login"
             className="font-medium text-gray-500 hover:underline hover:text-gray-300"
           >
             Sign In

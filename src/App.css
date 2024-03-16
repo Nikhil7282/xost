@@ -18,17 +18,12 @@ body {
 .scrollable {
   display: flex;
   align-items: center;
-  /* justify-content: flex-end; */
   flex-direction: column;
   width: 100%;
   height: max-content;
-  /* overflow-y: scroll; */
 }
 .messageItem {
-  /* display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-direction: column; */
+
   width: 100%;
   margin: 0.5rem 0;
 }
@@ -44,7 +39,6 @@ body {
   background: #555;
 }
 .typing-loader {
-  /* margin: 60px auto; */
   margin-bottom: 1rem;
   position: absolute;
   top: -13px;

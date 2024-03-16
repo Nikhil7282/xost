@@ -1,32 +1,26 @@
 import {
-  Backdrop,
-  Box,
-  Button,
-  Modal,
   Typography,
-  Fade,
   Stack,
+  Menu,
+  Tooltip,
+  IconButton,
+  MenuItem,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { useAuthChat } from "../../hooks/contextHooks";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 350,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  borderRadius: "10px",
-  boxShadow: 24,
-  p: 4,
-};
-
 function NotificationModel() {
   const chat = useAuthChat();
-  // console.log(chat?.notification);
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const openMenu = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     chat?.setNotification(
@@ -44,67 +38,82 @@ function NotificationModel() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      {open ? (
-        <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          open={open}
-          onClose={() => setOpen(false)}
-          closeAfterTransition
-          slots={{ backdrop: Backdrop }}
-          slotProps={{
-            backdrop: {
-              timeout: 500,
-            },
-          }}
+      <Tooltip title="Account settings">
+        <IconButton
+          onClick={handleClick}
+          size="small"
+          sx={{ ml: 2 }}
+          aria-controls={open ? "account-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
         >
-          <Fade in={open}>
-            <Box sx={style}>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Typography>
-                  {chat?.notification.length == 0 ? (
-                    <Typography>No Notifications Yet</Typography>
-                  ) : (
-                    <Stack>
-                      {chat?.notification?.map((not) => (
-                        <Box
-                          sx={{ border: "1px solid black", cursor: "pointer" }}
-                          key={not._id}
-                          onClick={() => redirectChat(not.chatId, not._id)}
-                        >
-                          <Typography>
-                            {not.chatId.isGroupChat
-                              ? not.chatId.chatName
-                              : not.sender.name}
-                          </Typography>
-                          <Typography>{not.content}</Typography>
-                        </Box>
-                      ))}
-                    </Stack>
-                  )}
-                </Typography>
-
-                <Button variant="contained" onClick={() => setOpen(false)}>
-                  Close
-                </Button>
-              </Box>
-            </Box>
-          </Fade>
-        </Modal>
-      ) : (
-        <NotificationsIcon
-          fontSize={"medium"}
-          color="primary"
-          onClick={() => setOpen(true)}
-        />
-      )}
+          <NotificationsIcon />
+        </IconButton>
+      </Tooltip>
+      <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={openMenu}
+        onClose={handleClose}
+        onClick={handleClose}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: "visible",
+            width: "300px",
+            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+            mt: 0,
+            pt: 0,
+            "& .MuiAvatar-root": {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            "&::before": {
+              content: '""',
+              display: "block",
+              position: "absolute",
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: "background.paper",
+              transform: "translateY(-50%) rotate(45deg)",
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        <Typography>
+          {chat?.notification.length == 0 ? (
+            <Typography>No Notifications Yet</Typography>
+          ) : (
+            <Stack>
+              {chat?.notification?.map((not) => (
+                <MenuItem
+                  sx={{ cursor: "pointer", borderTop: "1px solid #e8e8e8" }}
+                  key={not._id}
+                  onClick={() => redirectChat(not.chatId, not._id)}
+                >
+                  <Stack>
+                    <Typography>
+                      {not.chatId.isGroupChat
+                        ? not.chatId.chatName
+                        : not.sender.name}
+                    </Typography>
+                    <Typography sx={{ fontSize: "0.6rem", color: "gray" }}>
+                      {not.content}
+                    </Typography>
+                  </Stack>
+                </MenuItem>
+              ))}
+            </Stack>
+          )}
+        </Typography>
+      </Menu>
     </>
   );
 }

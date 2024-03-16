@@ -46,7 +46,6 @@ export default function UpdateGroupChatModel() {
   const [searchResult, setSearchResult] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [renameLoading, setRenameLoading] = useState(false);
-  console.log(chat?.selectedChat);
 
   useEffect(() => {
     const getUsers = setTimeout(async () => {
@@ -143,7 +142,6 @@ export default function UpdateGroupChatModel() {
     }
     try {
       const res = await axiosDeleteGroup(chatId);
-      // console.log(res);
       chat?.setChats(chat?.chats?.filter((ch) => ch._id !== chatId));
       toast.success(res.message);
       setOpen(false);

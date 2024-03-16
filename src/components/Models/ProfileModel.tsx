@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { User } from "../../context/AuthContext";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 const style = {
   position: "absolute",
@@ -82,11 +83,7 @@ function ProfileModel({ children, user }: Props) {
         </Modal>
       ) : (
         <Button onClick={() => setOpen(true)}>
-          {children ? (
-            <span>{children}</span>
-          ) : (
-            <Avatar src={user?.pic} alt={user?.name} />
-          )}
+          {children ? <span>{children}</span> : <MoreVertIcon />}
         </Button>
       )}
     </>

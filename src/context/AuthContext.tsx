@@ -4,7 +4,6 @@ import {
   getLocalStorage,
   removeLocalStorage,
 } from "../hooks/storageHooks";
-import { setBearerToken } from "../axios/axiosClient";
 
 export type UserAuth = {
   user: User | null;

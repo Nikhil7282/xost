@@ -46,7 +46,6 @@ const ChatsProvider = ({ children }: { children: ReactNode }) => {
   const [fetchChatAgain, setFetchChatAgain] = useState(false);
   const [notification, setNotification] = useState<Message[] | []>([]);
   const auth = useAuthUser();
-  // console.log("context:", auth);
 
   const fetchChats = async () => {
     try {

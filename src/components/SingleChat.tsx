@@ -76,7 +76,6 @@ function SingleChat() {
     try {
       socket.emit("join-room", chat?.selectedChat._id);
       setLoading(true);
-      console.log(chat?.selectedChat?._id);
       const res = await axiosGetAllMessages(chat?.selectedChat._id || "");
       setMessages(res.data);
       setLoading(false);
@@ -98,7 +97,6 @@ function SingleChat() {
         }
         socket.emit("stopTyping", chat?.selectedChat?._id);
         setMessages([...messages, res.data]);
-        // console.log(res.data);
         socket.emit("send-message", res.data);
       } catch (error: any) {
         console.log(error);
@@ -173,7 +171,9 @@ function SingleChat() {
             </Button>
             {!chat.selectedChat.isGroupChat ? (
               <>
-                {useGetSender(chat.selectedChat.users)?.toUpperCase()}
+                <Typography ml={1}>
+                  {useGetSender(chat.selectedChat.users)?.toUpperCase()}
+                </Typography>
                 <ProfileModel
                   user={useGetSenderObject(chat.selectedChat.users)}
                 />
@@ -211,24 +211,43 @@ function SingleChat() {
                 bottom: "1rem",
               }}
             >
-              {typing ? <div className="typing-loader"></div> : <></>}
-              <LocationOnIcon onClick={sendLocation} />
-              <input
-                ref={ref}
-                value={newMessage}
-                placeholder="Enter a message"
-                className="w-full h-12 pl-8 pr-8 outline-none mr-9 rounded-xl"
-                onChange={typingHandler}
-              ></input>
-              <SendIcon
-                sx={{
-                  position: "absolute",
-                  right: "2.7rem",
-                  top: "28%",
-                  curser: "pointer",
-                }}
-                onClick={sendMessage}
-              />
+              <div className="relative">
+                {typing ? <div className="typing-loader"></div> : <></>}
+
+                <input
+                  ref={ref}
+                  value={newMessage}
+                  placeholder="Enter a message"
+                  className="w-full h-12 pl-14 pr-8 outline-none mr-9 rounded-xl"
+                  onChange={typingHandler}
+                ></input>
+                <SendIcon
+                  sx={{
+                    position: "absolute",
+                    right: "1rem",
+                    top: "26.5%",
+                    curser: "pointer",
+                  }}
+                  onClick={sendMessage}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "0.5rem",
+                    top: "15%",
+                    cursor: "pointer",
+                    borderRadius: "0.6rem",
+                    padding: "0.5rem",
+                    height: "35px",
+                    width: "35px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <LocationOnIcon onClick={sendLocation} />
+                </div>
+              </div>
             </FormControl>
           </Box>
         </>

@@ -43,7 +43,6 @@ function SideDrawer() {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [loadingChat, setLoadingChat] = useState();
 
   //drawer state
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -77,7 +76,6 @@ function SideDrawer() {
       setLoading(true);
       let res = await axiosSearchUsers(search);
       setSearchResult(res);
-      // console.log(res);
       setLoading(false);
     } catch (error: any) {
       setLoading(false);
@@ -145,14 +143,11 @@ function SideDrawer() {
           Xost
         </Typography>
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          <Tooltip title="Notifications" arrow placement="bottom-end">
-            <div>
-              <Badge badgeContent={chat?.notification.length} color="primary">
-                <NotificationModel />
-              </Badge>
-              {/* <Notification/> */}
-            </div>
-          </Tooltip>
+          <div>
+            <Badge badgeContent={chat?.notification.length} color="primary">
+              <NotificationModel />
+            </Badge>
+          </div>
           <div
             id="profile"
             style={{ cursor: "pointer" }}
@@ -164,7 +159,6 @@ function SideDrawer() {
               sx={{ cursor: "pointer" }}
             />
           </div>
-          <Menu open={false}></Menu>
           <Menu
             open={open}
             id="profile"
@@ -185,7 +179,6 @@ function SideDrawer() {
         open={openDrawer}
       >
         <Box>
-          {/* <Typography  sx={{background:"#f1f1f1", padding:"1rem"}}>Search Users</Typography> */}
           <List>
             <ListItem>
               <TextField
@@ -196,13 +189,10 @@ function SideDrawer() {
                 onChange={(e) => setSearch(e.target.value)}
               />
               <button
-                // variant="contained"
-                // sx={{ marginLeft: "5px" }}
                 onClick={handleSearch}
                 className="ml-2"
                 style={{ background: "#4E4CC4" }}
               >
-                {/* Go */}
                 <SearchIcon sx={{ color: "white" }} />
               </button>
             </ListItem>

@@ -2,7 +2,8 @@ import axios from "axios";
 import { User } from "../context/AuthContext";
 import { getLocalStorage } from "../hooks/storageHooks";
 
-export const endPoint = "http://localhost:3000";
+// export const endPoint = "http://localhost:3000";
+export const endPoint = "https://xost-server.onrender.com";
 
 const axiosClient = axios.create();
 axiosClient.defaults.baseURL = `${endPoint}/api`;

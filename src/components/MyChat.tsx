@@ -6,7 +6,6 @@ import { useGetSender } from "../hooks/senderHooks";
 
 function MyChat() {
   const chat = useAuthChat();
-
   return (
     <Box
       display={{ xs: chat?.selectedChat ? "none" : "flex", md: "flex" }}
@@ -27,8 +26,12 @@ function MyChat() {
         justifyContent="space-between"
         alignItems="center"
       >
-        <Typography variant="h6">My Chats</Typography>
-        <AddGroupModel>New Group</AddGroupModel>
+        <Typography variant="h5">My Chats</Typography>
+        <AddGroupModel>
+          <Typography sx={{ fontSize: "0.8rem", color: "gray" }}>
+            New Group
+          </Typography>
+        </AddGroupModel>
       </Box>
       <Box
         display="flex"
@@ -51,12 +54,19 @@ function MyChat() {
                 gap={2}
                 onClick={() => chat?.setSelectedChat(ch)}
                 key={ch._id}
-                sx={{ cursor: "pointer", borderRadius: "5px" }}
-                px={3}
+                sx={{ cursor: "pointer", borderRadius: "0px" }}
+                px={2}
                 py={2}
-                m={"3px"}
-                bgcolor={chat?.selectedChat === ch ? "#38B2AC" : "#E8E8E8"}
-                color={chat?.selectedChat === ch ? "white" : "black"}
+                // m={"3px"}
+                borderTop="1px solid #E8E8E8"
+                bgcolor={
+                  chat.selectedChat?._id === ch._id ? "rgb(78, 76, 196)" : ""
+                }
+                color={
+                  chat.selectedChat?._id === ch._id
+                    ? "white !important"
+                    : "white !important"
+                }
               >
                 <Avatar />
                 <Typography>
