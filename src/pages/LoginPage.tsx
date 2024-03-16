@@ -1,11 +1,10 @@
 import { useState } from "react";
 import axiosClient from "../axios/axiosClient";
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuthUser } from "../hooks/contextHooks";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { Boxes } from "../animations/Boxes";
-import { cn } from "../utils/cn";
 
 type userDetails = {
   name: string;
