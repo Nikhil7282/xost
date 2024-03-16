@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import { User } from "../../context/AuthContext";
 import { useAuthChat } from "../../hooks/contextHooks";
-import { Avatar, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import { axiosCreateGroup, axiosSearchUsers } from "../../axios/axiosClient";
 import { CircularProgress } from "@mui/material";
 import toast from "react-hot-toast";
@@ -45,7 +45,6 @@ export default function AddGroupModel({ children }: Props) {
   const [searchResults, setSearchResults] = useState<User[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [createLoading, setCreateLoading] = useState(false);
-  // console.log(selectedUsers);
 
   useEffect(() => {
     const getUsers = setTimeout(async () => {
