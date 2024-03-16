@@ -38,7 +38,7 @@ export type ChatType = {
   __v?: number;
 };
 
-export const chatContext = createContext<ChatAuth | null>(null);
+export const ChatContext = createContext<ChatAuth | null>(null);
 
 const ChatsProvider = ({ children }: { children: ReactNode }) => {
   const [chats, setChats] = useState<ChatType[] | []>([]);
@@ -73,7 +73,7 @@ const ChatsProvider = ({ children }: { children: ReactNode }) => {
     notification,
     setNotification,
   };
-  return <chatContext.Provider value={value}>{children}</chatContext.Provider>;
+  return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
 };
 
 export default ChatsProvider;
