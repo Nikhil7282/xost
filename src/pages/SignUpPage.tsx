@@ -152,6 +152,7 @@ export default function SignUpPage() {
       file:text-sm file:font-semibold
       file:bg-gray-600 file:text-white
       hover:file:bg-gray-800 
+      hover:cursor-pointer
       file:disabled:opacity-50 file:disabled:pointer-events-none"
             />
           </div>
