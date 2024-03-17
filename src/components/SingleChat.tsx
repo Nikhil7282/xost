@@ -25,19 +25,19 @@ function SingleChat() {
   const [messages, setMessages] = useState<Message[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
-  const [socketConnected, setSocketConnected] = useState(false);
+  // const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
 
   useEffect(() => {
     fetchMessages();
-    socket.on("connection", () => setSocketConnected(true));
-    socket.on("disconnect", () => setSocketConnected(false));
+    socket.on("connection", () => console.log("Sent connected"));
+    socket.on("disconnect", () => console.log("Socket disconnected"));
   }, [chat?.selectedChat]);
 
   useEffect(() => {
     ref.current?.focus();
     if (!socket || !socket.connected) {
-      console.error("Socket Error");
+      console.error("Socket Error", socket);
       return;
     }
     socket.on("receive-message", (message: Message) => {

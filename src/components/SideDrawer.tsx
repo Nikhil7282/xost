@@ -52,10 +52,6 @@ function SideDrawer() {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
 
-  const handleMenuClose = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(null);
-  };
-
   //logout
   const handleLogout = () => {
     auth?.logout();
@@ -164,7 +160,7 @@ function SideDrawer() {
             MenuListProps={{
               "aria-labelledby": "profile",
             }}
-            onClose={handleMenuClose}
+            onClose={() => setAnchorEl(null)}
           >
             <ProfileModel user={auth?.user}>Profile</ProfileModel>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
