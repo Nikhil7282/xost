@@ -102,6 +102,7 @@ export default function UpdateGroupChatModel() {
         user._id || ""
       );
       setLoading(false);
+      chat?.setSelectedChat(res.chat);
       toast.success(res.message);
     } catch (error: any) {
       setLoading(false);
@@ -223,15 +224,19 @@ export default function UpdateGroupChatModel() {
                     size="small"
                   />
                 </Box>
-                <Box>
-                  {searchResult?.map((user) => (
-                    <UserListItem
-                      key={user._id}
-                      user={user}
-                      handleFunction={() => handleAddUser(user)}
-                    />
-                  ))}
-                </Box>
+                {loading ? (
+                  <CircularProgress color="secondary" />
+                ) : (
+                  <Box>
+                    {searchResult?.map((user) => (
+                      <UserListItem
+                        key={user._id}
+                        user={user}
+                        handleFunction={() => handleAddUser(user)}
+                      />
+                    ))}
+                  </Box>
+                )}
               </>
             ) : (
               <></>
