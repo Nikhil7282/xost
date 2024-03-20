@@ -9,6 +9,7 @@ export type UserAuth = {
   user: User | null;
   isLoggedIn: boolean;
   login: (user: User, token: string) => void;
+  signUp: (user: User, token: string) => void;
   logout: () => void;
 };
 
@@ -41,6 +42,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoggedIn(true);
   };
 
+  const signUp = async (user: User, token: string) => {
+    addLocalStorage("userInfo", user);
+    addLocalStorage("token", token);
+    setUser(user);
+    setIsLoggedIn(true);
+  };
+
   const logout = async () => {
     setUser(null);
     setIsLoggedIn(false);
@@ -53,6 +61,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isLoggedIn,
     login,
     logout,
+    signUp,
   };
   return <Authcontext.Provider value={value}>{children}</Authcontext.Provider>;
 };

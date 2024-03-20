@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthUser } from "../hooks/contextHooks";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { Boxes } from "../animations/Boxes";
+import { loginValidation } from "../utils/validation";
 
 type userDetails = {
   name: string;
@@ -29,17 +30,25 @@ export default function LoginPage() {
     // console.log(userDetails);
 
     try {
-      const res = await axiosClient.post("/user/login", userDetails);
+      const isValidate = await loginValidation.validate(userDetails, {
+        abortEarly: false,
+      });
+      // console.log(isValidate);
+      const res = await axiosClient.post("/user/login", isValidate);
       toast.success(res.data.message);
       console.log(res);
       navigate("/chats");
       auth?.login(res.data.user, res.data.token);
     } catch (error: any) {
+      if (error.inner) {
+        toast.error(error.inner[0].errors);
+        return;
+      }
       if (error.response.status === 401) {
         toast.error(error.response.data.message);
         return console.log(error.response.data.message);
       }
-      console.log(error);
+      console.log(error.inner[0].errors);
     }
   };
 

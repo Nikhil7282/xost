@@ -4,22 +4,30 @@ import axiosClient from "../axios/axiosClient";
 import { useNavigate } from "react-router-dom";
 import { Boxes } from "../animations/Boxes";
 import { CircularProgress } from "@mui/material";
+import { useAuthUser } from "../hooks/contextHooks";
+import { signUpValidation } from "../utils/validation";
+import toast from "react-hot-toast";
 
 type UserDetails = {
   name: string;
   email: string;
   password: string;
+  confirmPassword: string;
   pic: File | null;
 };
 
 export default function SignUpPage() {
+  const auth = useAuthUser();
   const navigate = useNavigate();
+
   const [userDetails, setUserDetails] = useState<UserDetails>({
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
     pic: null,
   });
+
   const [loading, setLoading] = useState<true | false>(false);
 
   const imageUpload = async (image: any) => {
@@ -57,13 +65,18 @@ export default function SignUpPage() {
     }
     setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = async (e: any): Promise<void> => {
     e.preventDefault();
     try {
-      const res = await axiosClient.post("/user/signup", userDetails);
-      navigate("/login");
-      return console.log(res);
+      const isValid = await signUpValidation.validate(userDetails, {
+        abortEarly: false,
+      });
+      const res = await axiosClient.post("/user/signup", isValid);
+      auth?.signUp(res.data.user, res.data.token);
+      navigate("/chats");
     } catch (error: any) {
+      toast.error(error.inner[0].errors);
       if (error.response.status === 401) {
         return console.log("user already exists");
       }
@@ -87,6 +100,7 @@ export default function SignUpPage() {
               Name
             </label>
             <input
+              required
               onChange={(e) => handleChange(e)}
               name="name"
               type="text"
@@ -101,6 +115,7 @@ export default function SignUpPage() {
               Email
             </label>
             <input
+              required
               onChange={(e) => handleChange(e)}
               name="email"
               type="email"
@@ -115,6 +130,7 @@ export default function SignUpPage() {
               Password
             </label>
             <input
+              required
               onChange={(e) => handleChange(e)}
               name="password"
               type="password"
@@ -129,6 +145,7 @@ export default function SignUpPage() {
               Confirm Password
             </label>
             <input
+              required
               onChange={(e) => handleChange(e)}
               name="confirmPassword"
               type="password"

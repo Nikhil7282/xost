@@ -77,7 +77,9 @@ export default function UpdateGroupChatModel() {
         chat?.selectedChat?._id || "",
         user._id || ""
       );
+      console.log(res);
       setLoading(false);
+      chat?.setSelectedChat(res.chat);
       toast.success(res.message);
       if (user._id === auth?.user?._id) {
         chat?.setChats(
@@ -144,6 +146,7 @@ export default function UpdateGroupChatModel() {
     try {
       const res = await axiosDeleteGroup(chatId);
       chat?.setChats(chat?.chats?.filter((ch) => ch._id !== chatId));
+      chat?.setSelectedChat(null);
       toast.success(res.message);
       setOpen(false);
     } catch (error: any) {
