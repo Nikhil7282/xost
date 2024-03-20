@@ -5,11 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { Boxes } from "../animations/Boxes";
 import { CircularProgress } from "@mui/material";
 import { useAuthUser } from "../hooks/contextHooks";
+import { signUpValidation } from "../utils/validation";
+import toast from "react-hot-toast";
 
 type UserDetails = {
   name: string;
   email: string;
   password: string;
+  confirmPassword: string;
   pic: File | null;
 };
 
@@ -21,6 +24,7 @@ export default function SignUpPage() {
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
     pic: null,
   });
 
@@ -65,11 +69,14 @@ export default function SignUpPage() {
   const handleSubmit = async (e: any): Promise<void> => {
     e.preventDefault();
     try {
-      const res = await axiosClient.post("/user/signup", userDetails);
+      const isValid = await signUpValidation.validate(userDetails, {
+        abortEarly: false,
+      });
+      const res = await axiosClient.post("/user/signup", isValid);
       auth?.signUp(res.data.user, res.data.token);
       navigate("/chats");
-      return console.log(res);
     } catch (error: any) {
+      toast.error(error.inner[0].errors);
       if (error.response.status === 401) {
         return console.log("user already exists");
       }
