@@ -2,6 +2,7 @@ import { User } from "../context/AuthContext";
 import Badge from "@mui/material/Badge";
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/system";
+import { useAuthChat, useAuthUser } from "../hooks/contextHooks";
 
 type Prop = {
   user: User;
@@ -18,13 +19,18 @@ const StyledBadge = styled(Badge)({
 });
 
 function UserBadge({ user, handleFunction }: Prop) {
+  const auth = useAuthUser();
+  const chat = useAuthChat();
+
   return (
     <StyledBadge>
       {user.name}
-      <CloseIcon
-        style={{ paddingLeft: "8px" }}
-        onClick={() => handleFunction(user)}
-      />
+      {auth?.user?._id === chat?.selectedChat?.groupAdmin._id && (
+        <CloseIcon
+          style={{ paddingLeft: "8px" }}
+          onClick={() => handleFunction(user)}
+        />
+      )}
     </StyledBadge>
   );
 }

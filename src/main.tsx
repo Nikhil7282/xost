@@ -16,18 +16,18 @@ const theme = createTheme({
   },
 });
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <Router>
-      <AuthProvider>
-        <ChatsProvider>
-          <ThemeProvider theme={theme}>
-            <SocketProvider>
-              <Toaster />
-              <App />
-            </SocketProvider>
-          </ThemeProvider>
-        </ChatsProvider>
-      </AuthProvider>
-    </Router>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <Router>
+    <AuthProvider>
+      <ChatsProvider>
+        <ThemeProvider theme={theme}>
+          <SocketProvider>
+            <Toaster />
+            <App />
+          </SocketProvider>
+        </ThemeProvider>
+      </ChatsProvider>
+    </AuthProvider>
+  </Router>
+  // </React.StrictMode>
 );

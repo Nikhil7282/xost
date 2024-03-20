@@ -4,6 +4,7 @@ import axiosClient from "../axios/axiosClient";
 import { useNavigate } from "react-router-dom";
 import { Boxes } from "../animations/Boxes";
 import { CircularProgress } from "@mui/material";
+import { useAuthUser } from "../hooks/contextHooks";
 
 type UserDetails = {
   name: string;
@@ -13,13 +14,16 @@ type UserDetails = {
 };
 
 export default function SignUpPage() {
+  const auth = useAuthUser();
   const navigate = useNavigate();
+
   const [userDetails, setUserDetails] = useState<UserDetails>({
     name: "",
     email: "",
     password: "",
     pic: null,
   });
+
   const [loading, setLoading] = useState<true | false>(false);
 
   const imageUpload = async (image: any) => {
@@ -57,11 +61,13 @@ export default function SignUpPage() {
     }
     setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = async (e: any): Promise<void> => {
     e.preventDefault();
     try {
       const res = await axiosClient.post("/user/signup", userDetails);
-      navigate("/login");
+      auth?.signUp(res.data.user, res.data.token);
+      navigate("/chats");
       return console.log(res);
     } catch (error: any) {
       if (error.response.status === 401) {
@@ -87,6 +93,7 @@ export default function SignUpPage() {
               Name
             </label>
             <input
+              required
               onChange={(e) => handleChange(e)}
               name="name"
               type="text"
@@ -101,6 +108,7 @@ export default function SignUpPage() {
               Email
             </label>
             <input
+              required
               onChange={(e) => handleChange(e)}
               name="email"
               type="email"
@@ -115,6 +123,7 @@ export default function SignUpPage() {
               Password
             </label>
             <input
+              required
               onChange={(e) => handleChange(e)}
               name="password"
               type="password"
@@ -129,6 +138,7 @@ export default function SignUpPage() {
               Confirm Password
             </label>
             <input
+              required
               onChange={(e) => handleChange(e)}
               name="confirmPassword"
               type="password"
