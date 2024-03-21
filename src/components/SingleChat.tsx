@@ -30,16 +30,16 @@ function SingleChat() {
 
   useEffect(() => {
     fetchMessages();
-    socket.on("connection", () => console.log("Sent connected"));
+    socket.on("connection", () => console.log("Socket connected"));
     socket.on("disconnect", () => console.log("Socket disconnected"));
   }, [chat?.selectedChat]);
 
   useEffect(() => {
-    ref.current?.focus();
     if (!socket || !socket.connected) {
       console.error("Socket Error", socket);
       return;
     }
+    ref.current?.focus();
     socket.on("receive-message", (message: Message) => {
       if (!messages) {
         return;

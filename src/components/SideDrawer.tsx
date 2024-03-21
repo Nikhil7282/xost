@@ -194,7 +194,7 @@ function SideDrawer() {
               <ListItem>
                 <UsersLoader />
               </ListItem>
-            ) : (
+            ) : searchResult.length > 0 ? (
               searchResult?.map((user: any) => (
                 <UserListItem
                   key={user._id}
@@ -202,6 +202,8 @@ function SideDrawer() {
                   handleFunction={() => accessChat(user)}
                 />
               ))
+            ) : (
+              <div style={{ marginLeft: "10px" }}>No Users Found</div>
             )}
           </List>
         </Box>
