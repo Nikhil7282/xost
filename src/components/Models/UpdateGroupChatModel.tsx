@@ -197,7 +197,7 @@ export default function UpdateGroupChatModel() {
                 );
               })}
             </Box>
-            <Box sx={{ width: "80%", display: "flex" }}>
+            <Box sx={{ width: "80%", display: "flex", marginBottom: "10px" }}>
               <TextField
                 size="small"
                 label="Rename"
@@ -205,7 +205,7 @@ export default function UpdateGroupChatModel() {
               />
               <Button
                 variant="contained"
-                sx={{ marginLeft: "3px", width: "30%" }}
+                sx={{ marginLeft: "5px", width: "30%" }}
                 onClick={handleGroupRename}
               >
                 {renameLoading ? (
@@ -220,7 +220,7 @@ export default function UpdateGroupChatModel() {
             {chat?.selectedChat?.groupAdmin._id ===
             getLocalStorage("userInfo")._id ? (
               <>
-                <Box sx={{ margin: "15px" }}>
+                <Box sx={{ margin: "10px" }}>
                   <TextField
                     label="Add User"
                     onChange={(e) => setSearch(e.target.value)}

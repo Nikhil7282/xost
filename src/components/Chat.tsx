@@ -29,22 +29,18 @@ function Chat({ messages }: Prop) {
               <span
                 style={{
                   backgroundColor: `${
-                    //@ts-ignore
                     m.sender._id === auth?.user?._id ? "#B9F5D0" : "#beb9b9"
                   }`,
                   color: `${
-                    //@ts-ignore
                     m.sender._id === auth?.user?._id ? "#000000" : "#ffffff"
                   }`,
                   float: `${
-                    //@ts-ignore
                     m.sender._id === auth?.user?._id ? "right" : "left"
                   }`,
                   borderRadius: "10px",
                   padding: "5px 10px",
                   maxWidth: "70%",
 
-                  //@ts-ignore
                   marginLeft: `${
                     m.sender._id === auth?.user?._id ? "303px" : "0"
                   }`,

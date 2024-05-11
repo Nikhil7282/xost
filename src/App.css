@@ -11,6 +11,31 @@ body {
 .App {
   height: 100vh;
 }
+.search-container {
+  display: flex;
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+}
+.search-input input {
+  border: none;
+  height: 20px;
+  padding: 5px;
+  color: black;
+}
+.search-input input:focus {
+  outline: none;
+}
+
 .full-height {
   height: 100vh;
 }
@@ -23,7 +48,6 @@ body {
   height: max-content;
 }
 .messageItem {
-
   width: 100%;
   margin: 0.5rem 0;
 }
