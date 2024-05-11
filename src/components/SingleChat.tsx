@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Button, FormControl, Typography } from "@mui/material";
 import { useAuthChat, useSocket } from "../hooks/contextHooks";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useGetSender, useGetSenderObject } from "../hooks/senderHooks";
+import { getSender, getSenderObject } from "../hooks/senderHooks";
 import ProfileModel from "./Models/ProfileModel";
 import UpdateGroupChatModel from "./Models/UpdateGroupChatModel";
 import { useEffect, useRef, useState } from "react";
@@ -12,12 +13,14 @@ import { User } from "../context/AuthContext";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SendIcon from "@mui/icons-material/Send";
 import toast from "react-hot-toast";
+
 export type Message = {
   _id: string;
   content: string;
   chatId: ChatType;
   sender: User;
 };
+
 function SingleChat() {
   const chat = useAuthChat();
   const socket = useSocket();
@@ -25,7 +28,6 @@ function SingleChat() {
   const [messages, setMessages] = useState<Message[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
-  // const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
 
   useEffect(() => {
@@ -40,6 +42,7 @@ function SingleChat() {
       return;
     }
     ref.current?.focus();
+    setNewMessage("");
     socket.on("receive-message", (message: Message) => {
       if (!messages) {
         return;
@@ -88,7 +91,7 @@ function SingleChat() {
     if ((e.key === "Enter" || e.type === "click") && newMessage) {
       try {
         setNewMessage("");
-        let res = await axiosSendMessage(
+        const res = await axiosSendMessage(
           newMessage,
           chat?.selectedChat?._id || ""
         );
@@ -113,8 +116,8 @@ function SingleChat() {
       };
       navigator.geolocation.getCurrentPosition(
         (pos) => {
-          let lat = pos.coords.latitude;
-          let lon = pos.coords.longitude;
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
           setNewMessage(
             newMessage + ` https://www.google.com/maps?q=${lat},${lon}`
           );
@@ -135,11 +138,11 @@ function SingleChat() {
     if (!typing) {
       socket.emit("typing", chat?.selectedChat?._id);
     }
-    let lastTime = new Date().getTime();
-    let timerLength = 3000;
+    const lastTime = new Date().getTime();
+    const timerLength = 3000;
     setTimeout(() => {
-      let timeNow = new Date().getTime();
-      let timeDiff = timeNow - lastTime;
+      const timeNow = new Date().getTime();
+      const timeDiff = timeNow - lastTime;
       if (timeDiff > timerLength) {
         socket.emit("stopTyping", chat?.selectedChat?._id);
       }
@@ -172,11 +175,9 @@ function SingleChat() {
             {!chat.selectedChat.isGroupChat ? (
               <>
                 <Typography ml={1}>
-                  {useGetSender(chat.selectedChat.users)?.toUpperCase()}
+                  {getSender(chat.selectedChat.users)?.toUpperCase()}
                 </Typography>
-                <ProfileModel
-                  user={useGetSenderObject(chat.selectedChat.users)}
-                />
+                <ProfileModel user={getSenderObject(chat.selectedChat.users)} />
               </>
             ) : (
               <>

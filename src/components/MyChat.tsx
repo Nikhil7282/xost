@@ -2,7 +2,7 @@ import { useAuthChat } from "../hooks/contextHooks";
 import { Avatar, Box, Stack, Typography } from "@mui/material";
 import UsersLoader from "./Loader/UsersLoader";
 import AddGroupModel from "./Models/AddGroupModel";
-import { useGetSender, useGetSenderObject } from "../hooks/senderHooks";
+import { getSender, getSenderObject } from "../hooks/senderHooks";
 
 function MyChat() {
   const chat = useAuthChat();
@@ -69,12 +69,14 @@ function MyChat() {
                 }
               >
                 {!ch.isGroupChat ? (
-                  <Avatar src={useGetSenderObject(ch.users)?.pic} />
+                  // eslint-disable-next-line react-hooks/rules-of-hooks
+                  <Avatar src={getSenderObject(ch.users)?.pic} />
                 ) : (
                   <Avatar src="https://res.cloudinary.com/dhpnudwl9/image/upload/jq0gutysth4mcoqcszxl.jpg" />
                 )}
                 <Typography>
-                  {!ch.isGroupChat ? useGetSender(ch.users) : ch.chatName}
+                  // eslint-disable-next-line react-hooks/rules-of-hooks
+                  {!ch.isGroupChat ? getSender(ch.users) : ch.chatName}
                 </Typography>
               </Box>
             ))}

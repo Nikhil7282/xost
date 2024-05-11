@@ -36,7 +36,6 @@ export default function LoginPage() {
       // console.log(isValidate);
       const res = await axiosClient.post("/user/login", isValidate);
       toast.success(res.data.message);
-      console.log(res);
       navigate("/chats");
       auth?.login(res.data.user, res.data.token);
     } catch (error: any) {
@@ -44,6 +43,8 @@ export default function LoginPage() {
         toast.error(error.inner[0].errors);
         return;
       }
+      // console.log(error);
+
       if (error.response.status === 401) {
         toast.error(error.response.data.message);
         return console.log(error.response.data.message);
