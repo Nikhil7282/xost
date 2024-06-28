@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Button, FormControl, Typography } from "@mui/material";
 import { useAuthChat, useSocket } from "../hooks/contextHooks";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";

@@ -43,7 +43,7 @@ export default function LoginPage() {
         toast.error(error.inner[0].errors);
         return;
       }
-      // console.log(error);
+      console.log(error);
 
       if (error.response.status === 401) {
         toast.error(error.response.data.message);

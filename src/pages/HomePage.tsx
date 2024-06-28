@@ -10,7 +10,6 @@ function HomePage() {
     const userInfo = getLocalStorage("userInfo");
     if (userInfo) {
       navigate("/chats");
-    } else {
     }
   }, []);
 
@@ -24,8 +23,12 @@ function HomePage() {
       <p className="relative z-20 mt-2 text-center text-neutral-300">
         Connecting people, one message at a time
       </p>
-            <a href="/login" className="z-20 p-2 pl-6 pr-6 mt-10 bg-white outline-1 outline-offset-4 outline-white rounded-xl outline">Login</a>
-
+      <a
+        href="/login"
+        className="z-20 p-2 pl-6 pr-6 mt-10 bg-white outline-1 outline-offset-4 outline-white rounded-xl outline"
+      >
+        Login
+      </a>
     </div>
   );
 }

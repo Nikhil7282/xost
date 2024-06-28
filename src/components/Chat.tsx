@@ -1,6 +1,9 @@
 import ScrollableFeed from "react-scrollable-feed";
+
 import { Message } from "./SingleChat";
+
 import { useAuthUser } from "../hooks/contextHooks";
+
 import { Box } from "@mui/material";
 
 type Prop = {
