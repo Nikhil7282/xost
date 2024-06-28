@@ -38,7 +38,7 @@ function NotificationModel() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Tooltip title="Account settings">
+      <Tooltip title="Notification">
         <IconButton
           onClick={handleClick}
           size="small"

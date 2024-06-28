@@ -49,7 +49,7 @@ const ChatsProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchChats = async () => {
     try {
-      let res = await axiosFetchChats();
+      const res = await axiosFetchChats();
       setChats(res);
     } catch (error) {
       console.log(error);

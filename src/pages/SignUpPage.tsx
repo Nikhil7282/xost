@@ -74,13 +74,37 @@ export default function SignUpPage() {
       });
       const res = await axiosClient.post("/user/signup", isValid);
       auth?.signUp(res.data.user, res.data.token);
-      navigate("/chats");
-    } catch (error: any) {
-      toast.error(error.inner[0].errors);
-      if (error.response.status === 401) {
-        return console.log("user already exists");
+      if (res.status !== 201) {
+        toast.error(res.data.message);
+        // console.log(res.data.message);
+        return;
+      } else {
+        navigate("/chats");
       }
-      console.log(error);
+    } catch (error: any) {
+      if (error.name === "ValidationError" && error.inner) {
+        toast.error(error.inner[0].errors);
+        console.log("Validation Error:", error.inner[0].errors);
+      } else if (axios.isAxiosError(error)) {
+        if (error.response) {
+          if (error.response.status === 401) {
+            toast.error("User already exists");
+            return console.log("User already exists");
+          } else {
+            toast.error(error.response.data.message || "An error occurred");
+            console.log("Server Error:", error.response.data.message);
+          }
+        } else if (error.request) {
+          toast.error("No response from server");
+          console.log("No response from server:", error.request);
+        } else {
+          toast.error("Error in setting up request");
+          console.log("Error in setting up request:", error.message);
+        }
+      } else {
+        toast.error("An unexpected error occurred");
+        console.log("Unexpected Error:", error.message);
+      }
     }
   };
   return (

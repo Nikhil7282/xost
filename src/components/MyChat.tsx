@@ -69,13 +69,11 @@ function MyChat() {
                 }
               >
                 {!ch.isGroupChat ? (
-                  // eslint-disable-next-line react-hooks/rules-of-hooks
                   <Avatar src={getSenderObject(ch.users)?.pic} />
                 ) : (
                   <Avatar src="https://res.cloudinary.com/dhpnudwl9/image/upload/jq0gutysth4mcoqcszxl.jpg" />
                 )}
                 <Typography>
-                  // eslint-disable-next-line react-hooks/rules-of-hooks
                   {!ch.isGroupChat ? getSender(ch.users) : ch.chatName}
                 </Typography>
               </Box>
